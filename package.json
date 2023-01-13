@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "flex-plugin pre-script-check"
+    "postinstall": "flex-plugin pre-script-check",
+    "test": "jest"
   },
   "dependencies": {
     "react": "17.0.2",
@@ -25,6 +26,32 @@
     "@twilio/flex-ui": "2.0.2",
     "@types/react-redux": "^7.1.1",
     "react-test-renderer": "17.0.2",
-    "typescript": "^4"
+    "typescript": "^4",
+    "jest": "^26.0.20",
+    "jest-fetch-mock": "3.0.3",
+    "jest-junit": "12.0.0"
+  },
+  "jest": {
+    "rootDir": ".",
+    "clearMocks": true,
+    "automock": false,
+    "testResultsProcessor": "jest-junit",
+    "reporters": [
+      "default",
+      "jest-junit"
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover",
+      "cobertura"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupTests.js"
+    ]
+  },
+  "jest-junit": {
+    "outputDirectory": "./test-results"
   }
 }
