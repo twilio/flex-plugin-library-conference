@@ -1,45 +1,18 @@
-# Your custom Twilio Flex Plugin
+# Native Flex Dialpad Add-on for External Conferences
 
-Twilio Flex Plugins allow you to customize the appearance and behavior of [Twilio Flex](https://www.twilio.com/flex). If you want to learn more about the capabilities and how to use the API, check out our [Flex documentation](https://www.twilio.com/docs/flex).
+## How it works
 
-## Setup
+This plugin uses Twilio Functions and WorkerClient's createTask method to create conferences and TaskRouter tasks for orchestration in both agent-to-agent calls and external transfers features.
 
-Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmjs.com). We support Node >= 10.12 (and recommend the _even_ versions of Node). Afterwards, install the dependencies by running `npm install`:
+### External transfer (Conference)
 
-```bash
-cd
+When in a call, a "plus" icon is added to the Call Canvas where you can add a external number to the call. This action executes a Twilio Function that uses the Twilio API to make a call and add this call to the current conference. In the Flex UI side, the participant is added manually and both hold/unhold and hangup buttons are available.
 
-# If you use npm
-npm install
-```
+An invisible component is mounted to track participant state and set endConferenceOnExit appropriately to allow for external transfer functionality -- the agent can leave the call while the remaining conference participants continue to communicate. If there are two parties remaining, the call will automatically end when one of them hangs up.
 
-Next, please install the [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart) by running:
+This feature is based on the work on this [project](https://github.com/twilio-labs/plugin-flex-outbound-dialpad).
 
-```bash
-brew tap twilio/brew && brew install twilio
-```
-
-Finally, install the [Flex Plugin extension](https://github.com/twilio-labs/plugin-flex/tree/v1-beta) for the Twilio CLI:
-
-```bash
-twilio plugins:install @twilio-labs/plugin-flex
-```
-
-## Development
-
-Run `twilio flex:plugins --help` to see all the commands we currently support. For further details on Flex Plugins refer to our documentation on the [Twilio Docs](https://www.twilio.com/docs/flex/developer/plugins/cli) page.
-
-# conference
-
-When in a call, a "plus" icon is added to the call canvas where you can add an external number to the call.
-
-This feature is based on [the dialpad addon plugin](https://github.com/twilio-professional-services/flex-dialpad-addon-plugin).
-
-# flex-user-experience
-
-![Conference demo](screenshots/conference.gif)
-
-# setup and dependencies
+# Configuration
 
 ## Outbound Call Configuration
 
@@ -64,12 +37,108 @@ Content-Type: application/json
 }
 ```
 
-## TaskRouter
+## Flex Plugin
 
-In the `serverless-functions/.env` file, be sure to set `TWILIO_FLEX_WORKSPACE_SID` if it has not been already.
+This repository is a Flex plugin with some other assets. The following describing how you setup, develop and deploy your Flex plugin.
 
-# how does it work?
+### Setup
 
-This action executes a Twilio Function that uses the Twilio API to make a call and add this call to the current conference. In the Flex UI side, the participant is added manually and both hold/unhold and hangup buttons are available.
+Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmjs.com) installed.
 
-An invisible component is mounted to track participant state and set `endConferenceOnExit` appropriately to allow for external transfer functionality -- the agent can leave the call while the remaining conference participants continue to communicate. If there are two parties remaining, the call will automatically end when one of them hangs up.
+Afterwards, install the dependencies by running `npm install`:
+
+```bash
+cd
+
+# If you use npm
+npm install
+```
+
+### Development
+
+In order to develop locally, you can use the Twilio CLI to run the plugin locally. Using your commandline run the following from the root dirctory of the plugin.
+
+```bash
+twilio flex:plugins:start
+```
+
+This will automatically start up the Webpack Dev Server and open the browser for you. Your app will run on `http://localhost:3000`.
+
+When you make changes to your code, the browser window will be automatically refreshed.
+
+### Deploy
+
+#### Plugin Deployment
+
+Once you are happy with your plugin, you have to deploy then release the plugin for it to take affect on Twilio hosted Flex.
+
+Run the following command to start the deployment:
+
+```bash
+twilio flex:plugins:deploy --major --changelog "Notes for this version" --description "Functionality of the plugin"
+```
+
+After your deployment runs you will receive instructions for releasing your plugin from the bash prompt. You can use this or skip this step and release your plugin from the Flex plugin dashboard here https://flex.twilio.com/admin/plugins
+
+For more details on deploying your plugin, refer to the [deploying your plugin guide](https://www.twilio.com/docs/flex/plugins#deploying-your-plugin).
+
+Note: Common packages like `React`, `ReactDOM`, `Redux` and `ReactRedux` are not bundled with the build because they are treated as external dependencies so the plugin will depend on Flex to provide them globally.
+
+## Twilio Serverless
+
+You will need the [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart) and the [serverless plugin](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started) to deploy the functions inside the `serverless` folder of this project. You can install the necessary dependencies with the following commands:
+
+`npm install twilio-cli -g`
+
+and then
+
+`twilio plugins:install @twilio-labs/plugin-serverless`
+
+# How to use
+
+1. Setup all dependencies above: the workflow and Twilio CLI packages.
+
+2. Clone this repository
+
+3. Copy `.env.example` to `.env` and set the following variables:
+
+   - REACT_APP_SERVICE_BASE_URL: your Twilio Functions base url (this will be available after you deploy your functions). In local development environment, it could be your localhost base url.
+   - REACT_APP_TASK_CHANNEL_SID: the voice channel SID
+
+   **Note**: Remember that .env is for front-end use so do not add any type of key/secret variable to them. When developing, the .env.development is used while the .env.production is used when building and deploying the plugin. Also, just variables starting with the name _REACT*APP*_ will work.
+
+4. run `npm install`
+
+5. copy `./serverless/.env.sample` to `./serverless/.env` and populate the appropriate environment variables.
+
+```
+ACCOUNT_SID=
+AUTH_TOKEN=
+TWILIO_WORKFLOW_SID=
+TWILIO_WORKSPACE_SID=
+TWILIO_NUMBER=
+```
+
+6.  cd into ./serverless/ then run
+
+`npm install`
+
+and then
+
+`twilio serverless:deploy`
+
+(optionally you can run locally with `twilio serverless:start --ngrok=""`)
+
+### Laundry List of activities to be done for each plugin
+
+1. Create individual repo for each plugin
+2. Test the plugin against Felx UI 2.x for compatibility
+3. Create plugin specific CI/CD files for bundle creation, release creation and test suite
+4. UI logs to be replaced with standard ConsoleLogger provided as util in the repo
+5. Unit test for UI code (possibly for serverless code)
+6. Telemetry (varies from plugin to plugin)
+7. Exception handling and serverless retry mechanism (for wherever applicable)
+8. E2E test suite for the entire plugin
+9. Details.md file to have content that needs to show up on PluginsLibrary frontend
+10. Should have License file in the repo
+11. Updating the readme.md
