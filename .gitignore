@@ -145,8 +145,8 @@ test-results/
 
 # vscode
 .vscode
+.idea
 
 appConfig.js
 
 package-lock.json
-
