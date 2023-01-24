@@ -139,6 +139,7 @@ and then
 6. Telemetry (varies from plugin to plugin)
 7. Exception handling and serverless retry mechanism (for wherever applicable)
 8. E2E test suite for the entire plugin
-9. Details.md file to have content that needs to show up on PluginsLibrary frontend
-10. Should have License file in the repo
-11. Updating the readme.md
+9. For E2E or any automated test, prefer to rely on picking the UI elements using ID rather than any other approach.
+10. Details.md file to have content that needs to show up on PluginsLibrary frontend
+11. Should have License file in the repo
+12. Updating the readme.md

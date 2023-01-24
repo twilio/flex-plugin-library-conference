@@ -1,4 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
+import React from 'react';
 import ConferenceDialog from '../../components/ConferenceDialog';
 import ConferenceMonitor from '../../components/ConferenceMonitor';
 
