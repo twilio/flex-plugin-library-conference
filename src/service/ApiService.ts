@@ -44,13 +44,9 @@ export default abstract class ApiService {
         return response.json();
       })
       .catch(async (error) => {
-        // Try to return proper error message from both caught promises and Error objects
-        // https://gist.github.com/odewahn/5a5eeb23279eed6a80d7798fdb47fe91
         try {
-          // Generic retry when calls return a 'too many requests' response
-          // request is delayed by a random number which grows with the number of retries
           if (error.status === 429 && attempts < 10) {
-            await delay(random(100, 750) + attempts * 100);
+            await delay(random(10, 50) + attempts * 100);
             return await this.fetchJsonWithReject<T>(url, config, attempts + 1);
           }
           return error.json().then((response: any) => {

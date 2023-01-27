@@ -1,5 +1,5 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
-const ConferenceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conference-participant'].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['helpers/prepare-function'].path);
+const ConferenceOperations = require(Runtime.getFunctions()['twilio-wrappers/conference-participant'].path);
 
 const requiredParameters = [
   { key: 'conference', purpose: 'unique ID of conference to update' },

@@ -1,3 +1,4 @@
 import ConferenceDialog from './ConferenceDialog';
+import { withTaskContext } from '@twilio/flex-ui';
 
-export default ConferenceDialog;
+export default withTaskContext(ConferenceDialog);

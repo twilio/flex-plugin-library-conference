@@ -1,66 +1,71 @@
 import helpers from '../../test-utils/test-helper';
-import ProgrammableVoice from '../../../serverless/src/functions/twilio-wrappers/programmable-voice.private';
-
 const callSid = 'CSxxxxxxx';
 
-afterAll(() => {
-  helpers.teardown();
-});
+describe('addParticipant tests from ConferenceParticipant', () => {
+  beforeAll(() => {
+    helpers.setup();
+    global.Runtime._addFunction(
+      'twilio-wrappers/retry-handler',
+      './serverless/src/functions/twilio-wrappers/retry-handler.private.js',
+    );
+  });
 
-const getVoiceMockTwilioClient = function (fetchProperties) {
-  const mockVoiceService = {
-    fetch: fetchProperties,
+  const getVoiceMockTwilioClient = function (fetchProperties) {
+    const mockVoiceService = {
+      fetch: fetchProperties,
+    };
+    return {
+      calls: (_callSid) => mockVoiceService,
+    };
   };
-  return {
-    calls: (_callSid) => mockVoiceService,
-  };
-};
+  const fetchProperties = jest.fn(() => Promise.resolve());
+  it('fetchProperties returns success response', async () => {
+    const { fetchProperties } = require('../../../serverless/src/functions/twilio-wrappers/programmable-voice.private');
+    const parameters = {
+      callSid,
+    };
+    const context = {
+      getTwilioClient: () => getVoiceMockTwilioClient(fetchProperties),
+    };
 
-const fetchProperties = jest.fn(() => Promise.resolve());
+    const participant = await fetchProperties({ context, ...parameters });
 
-test('fetchProperties returns success response', async () => {
-  const parameters = {
-    callSid,
-  };
-  const context = {
-    getTwilioClient: () => getVoiceMockTwilioClient(fetchProperties),
-  };
+    expect(participant.success).toEqual(true);
+    expect(fetchProperties.mock.calls.length).toBe(1);
+  });
 
-  const participant = await ProgrammableVoice.fetchProperties({ context, ...parameters });
+  it('fetchProperties throws invalid parameters object passed', async () => {
+    const { fetchProperties } = require('../../../serverless/src/functions/twilio-wrappers/programmable-voice.private');
+    const parameters = {
+      callSid,
+    };
 
-  expect(participant.success).toEqual(true);
-  expect(fetchProperties.mock.calls.length).toBe(1);
-});
+    let err = null;
+    try {
+      await fetchProperties({ ...parameters });
+    } catch (error) {
+      err = error;
+    }
 
-test('fetchProperties throws invalid parameters object passed', async () => {
-  const parameters = {
-    callSid,
-  };
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain reason context object');
+  });
 
-  let err = null;
-  try {
-    await ProgrammableVoice.fetchProperties({ ...parameters });
-  } catch (error) {
-    err = error;
-  }
+  it('fetchProperties throws invalid parameters object passed', async () => {
+    const { fetchProperties } = require('../../../serverless/src/functions/twilio-wrappers/programmable-voice.private');
+    const parameters = {
+      callSid: 1,
+    };
+    const context = {
+      getTwilioClient: () => getVoiceMockTwilioClient(fetchProperties),
+    };
 
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain reason context object');
-});
+    let err = null;
+    try {
+      await fetchProperties({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
 
-test('fetchProperties throws invalid parameters object passed', async () => {
-  const parameters = {
-    callSid: 1,
-  };
-  const context = {
-    getTwilioClient: () => getVoiceMockTwilioClient(fetchProperties),
-  };
-
-  let err = null;
-  try {
-    await ProgrammableVoice.fetchProperties({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain callSid string');
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain callSid string');
+  });
 });

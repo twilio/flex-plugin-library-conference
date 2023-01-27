@@ -1,10 +1,4 @@
-const helpers = require('../../test-utils/test-helper.js');
-const {
-  addParticipant,
-  holdParticipant,
-  removeParticipant,
-  updateParticipant,
-} = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+import { setup } from '../../test-utils/test-helper.js';
 
 const mockTo = '+91xxxxxxxxxx';
 const mockFrom = '+91xxxxxxxxxx';
@@ -12,450 +6,545 @@ const taskSid = 'TSxxxxxxxx';
 const mockCallSid = 'CSxxxxxxxx';
 const participantSid = 'PSxxxxxxxx';
 
-afterAll(() => {
-  helpers.teardown();
-});
-
-const getAddParticipantMockTwilioClient = function (createParticipant) {
-  const createConferenceService = (taskSid) => ({
-    sid: taskSid,
+describe('addParticipant tests from ConferenceParticipant', () => {
+  beforeAll(() => {
+    setup();
+    global.Runtime._addFunction(
+      'twilio-wrappers/retry-handler',
+      './serverless/src/functions/twilio-wrappers/retry-handler.private.js',
+    );
   });
 
-  const mockConferenceService = {
-    conferences: {
-      create: createConferenceService,
-    },
-    participants: {
-      create: createParticipant,
-    },
-  };
-  return {
-    conferences: (_taskSid) => mockConferenceService,
-  };
-};
-
-const createParticipant = jest.fn(() =>
-  Promise.resolve({
-    callSid: mockCallSid,
-  }),
-);
-
-const getHolUpdateParticipantMockTwilioClient = function (holdParticipant) {
-  const mockConferenceService = {
-    participants: (_partSid) => ({
-      update: holdParticipant,
+  const createParticipant = jest.fn(() =>
+    Promise.resolve({
+      callSid: mockCallSid,
     }),
-  };
-  return {
-    conferences: (_taskSid) => mockConferenceService,
-  };
-};
-const holdUpdateParticipant = jest.fn(() =>
-  Promise.resolve({
-    callSid: mockCallSid,
-  }),
-);
+  );
 
-const getRemoveParticipantMockTwilioClient = function (removeParticipant) {
-  const mockConferenceService = {
-    participants: (_partSid) => ({
-      remove: removeParticipant,
+  const getAddParticipantMockTwilioClient = function (createParticipant) {
+    const createConferenceService = (taskSid) => ({
+      sid: taskSid,
+    });
+
+    const mockConferenceService = {
+      conferences: {
+        create: createConferenceService,
+      },
+      participants: {
+        create: createParticipant,
+      },
+    };
+    return {
+      conferences: (_taskSid) => mockConferenceService,
+    };
+  };
+
+  it('addParticipant returns success response', async () => {
+    const {
+      addParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      taskSid,
+      to: mockTo,
+      from: mockFrom,
+    };
+    const context = {
+      getTwilioClient: () => getAddParticipantMockTwilioClient(createParticipant),
+    };
+
+    const participant = await addParticipant({ context, ...parameters });
+
+    expect(participant).toEqual({
+      success: true,
+      callSid: mockCallSid,
+      status: 200,
+    });
+    expect(createParticipant.mock.calls.length).toBe(1);
+    expect(createParticipant.mock.calls[0][0]).toStrictEqual({
+      to: mockTo,
+      from: mockFrom,
+      earlyMedia: true,
+      endConferenceOnExit: false,
+    });
+  });
+
+  it('addParticipant throws invalid parameters object passed', async () => {
+    const {
+      addParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      taskSid,
+      to: mockTo,
+      from: mockFrom,
+    };
+
+    let err = null;
+    try {
+      await addParticipant({ ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain reason context object');
+  });
+
+  it('addParticipant throws invalid parameters object passed', async () => {
+    const {
+      addParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      taskSid: 1,
+      to: mockTo,
+      from: mockFrom,
+    };
+    const context = {
+      getTwilioClient: () => getAddParticipantMockTwilioClient(createParticipant),
+    };
+
+    let err = null;
+    try {
+      await addParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain taskSid string');
+  });
+
+  it('addParticipant throws invalid parameters object passed', async () => {
+    const {
+      addParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      taskSid,
+      to: 123,
+      from: mockFrom,
+    };
+
+    const context = {
+      getTwilioClient: () => getAddParticipantMockTwilioClient(createParticipant),
+    };
+
+    let err = null;
+    try {
+      await addParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain to string');
+  });
+
+  it('addParticipant throws invalid parameters object passed', async () => {
+    const {
+      addParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      taskSid,
+      to: mockTo,
+      from: 123,
+    };
+    const context = {
+      getTwilioClient: () => getAddParticipantMockTwilioClient(createParticipant),
+    };
+
+    let err = null;
+    try {
+      await addParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain from string');
+  });
+});
+
+describe('holdParticipant tests from ConferenceParticipant', () => {
+  beforeAll(() => {
+    setup();
+    global.Runtime._addFunction(
+      'twilio-wrappers/retry-handler',
+      './serverless/src/functions/twilio-wrappers/retry-handler.private.js',
+    );
+  });
+
+  const holdUpdateParticipant = jest.fn(() =>
+    Promise.resolve({
+      callSid: mockCallSid,
     }),
-  };
-  return {
-    conferences: (_taskSid) => mockConferenceService,
-  };
-};
-const removeParticipantMock = jest.fn(() => Promise.resolve());
+  );
 
-test('addParticipant returns success response', async () => {
-  const parameters = {
-    taskSid,
-    to: mockTo,
-    from: mockFrom,
-  };
-  const context = {
-    getTwilioClient: () => getAddParticipantMockTwilioClient(createParticipant),
+  const getHolUpdateParticipantMockTwilioClient = function (holdParticipant) {
+    const mockConferenceService = {
+      participants: (_partSid) => ({
+        update: holdParticipant,
+      }),
+    };
+    return {
+      conferences: (_taskSid) => mockConferenceService,
+    };
   };
 
-  const participant = await addParticipant({ context, ...parameters });
+  it('holdParticipant returns success response', async () => {
+    const {
+      holdParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: participantSid,
+      hold: true,
+    };
 
-  expect(participant).toEqual({
-    success: true,
-    callSid: mockCallSid,
-    status: 200,
+    const context = {
+      getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
+    };
+
+    const participant = await holdParticipant({ context, ...parameters });
+
+    expect(participant).toEqual({
+      success: true,
+      callSid: mockCallSid,
+      status: 200,
+    });
+    expect(holdUpdateParticipant.mock.calls.length).toBe(1);
+    expect(holdUpdateParticipant.mock.calls[0][0]).toStrictEqual({
+      hold: true,
+    });
   });
-  expect(createParticipant.mock.calls.length).toBe(1);
-  expect(createParticipant.mock.calls[0][0]).toStrictEqual({
-    to: mockTo,
-    from: mockFrom,
-    earlyMedia: true,
-    endConferenceOnExit: false,
+
+  it('holdParticipant throws invalid parameters object passed', async () => {
+    const {
+      holdParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: participantSid,
+      hold: true,
+    };
+
+    let err = null;
+    try {
+      await holdParticipant({ ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain reason context object');
   });
-});
 
-// test('addParticipant returns retry response', async () => {
-//   const parameters = {
-//     taskSid,
-//     to: mockTo,
-//     from: mockFrom,
-//     attempts: 0,
-//   };
-//   const context = {
-//     getTwilioClient: () => {},
-//   };
+  it('holdParticipant throws invalid parameters object passed', async () => {
+    const {
+      holdParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: 1,
+      participant: participantSid,
+      hold: true,
+    };
+    const context = {
+      getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
+    };
 
-//   const participant = await addParticipant({ context, ...parameters });
-//   expect(participant.status).toBe(500);
-// });
+    let err = null;
+    try {
+      await holdParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
 
-test('addParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    taskSid,
-    to: mockTo,
-    from: mockFrom,
-  };
-
-  let err = null;
-  try {
-    await addParticipant({ ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain reason context object');
-});
-
-test('addParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    taskSid: 1,
-    to: mockTo,
-    from: mockFrom,
-  };
-  const context = {
-    getTwilioClient: () => getAddParticipantMockTwilioClient(createParticipant),
-  };
-
-  let err = null;
-  try {
-    await addParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain taskSid string');
-});
-
-test('addParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    taskSid,
-    to: 123,
-    from: mockFrom,
-  };
-
-  const context = {
-    getTwilioClient: () => getAddParticipantMockTwilioClient(createParticipant),
-  };
-
-  let err = null;
-  try {
-    await addParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain to string');
-});
-
-test('addParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    taskSid,
-    to: mockTo,
-    from: 123,
-  };
-  const context = {
-    getTwilioClient: () => getAddParticipantMockTwilioClient(createParticipant),
-  };
-
-  let err = null;
-  try {
-    await addParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain from string');
-});
-
-test('holdParticipant returns success response', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: participantSid,
-    hold: true,
-  };
-
-  const context = {
-    getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
-  };
-
-  const participant = await holdParticipant({ context, ...parameters });
-
-  expect(participant).toEqual({
-    success: true,
-    callSid: mockCallSid,
-    status: 200,
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain conference string');
   });
-  expect(holdUpdateParticipant.mock.calls.length).toBe(1);
-  expect(holdUpdateParticipant.mock.calls[0][0]).toStrictEqual({
-    hold: true,
+
+  it('holdParticipant throws invalid parameters object passed', async () => {
+    const {
+      holdParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: 1,
+      hold: true,
+    };
+    const context = {
+      getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
+    };
+
+    let err = null;
+    try {
+      await holdParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain participant string');
+  });
+
+  it('holdParticipant throws invalid parameters object passed', async () => {
+    const {
+      holdParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: participantSid,
+      hold: 1,
+    };
+    const context = {
+      getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
+    };
+
+    let err = null;
+    try {
+      await holdParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain hold boolean');
   });
 });
 
-test('holdParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: participantSid,
-    hold: true,
-  };
-
-  let err = null;
-  try {
-    await holdParticipant({ ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain reason context object');
-});
-
-test('holdParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: 1,
-    participant: participantSid,
-    hold: true,
-  };
-  const context = {
-    getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
-  };
-
-  let err = null;
-  try {
-    await holdParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain conference string');
-});
-
-test('holdParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: 1,
-    hold: true,
-  };
-  const context = {
-    getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
-  };
-
-  let err = null;
-  try {
-    await holdParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain participant string');
-});
-
-test('holdParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: participantSid,
-    hold: 1,
-  };
-  const context = {
-    getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
-  };
-
-  let err = null;
-  try {
-    await holdParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain hold boolean');
-});
-
-test('updateParticipant returns success response', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: participantSid,
-    endConferenceOnExit: true,
-  };
-  const context = {
-    getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
-  };
-
-  const participant = await updateParticipant({ context, ...parameters });
-
-  expect(participant).toEqual({
-    success: true,
-    callSid: mockCallSid,
-    status: 200,
+describe('updateParticipant tests from ConferenceParticipant', () => {
+  beforeAll(() => {
+    setup();
+    global.Runtime._addFunction(
+      'twilio-wrappers/retry-handler',
+      './serverless/src/functions/twilio-wrappers/retry-handler.private.js',
+    );
   });
-  expect(holdUpdateParticipant.mock.calls.length).toBe(1);
-  expect(holdUpdateParticipant.mock.calls[0][0]).toStrictEqual({
-    endConferenceOnExit: true,
+
+  const holdUpdateParticipant = jest.fn(() =>
+    Promise.resolve({
+      callSid: mockCallSid,
+    }),
+  );
+
+  const getHolUpdateParticipantMockTwilioClient = function (holdParticipant) {
+    const mockConferenceService = {
+      participants: (_partSid) => ({
+        update: holdParticipant,
+      }),
+    };
+    return {
+      conferences: (_taskSid) => mockConferenceService,
+    };
+  };
+
+  it('updateParticipant returns success response', async () => {
+    const {
+      updateParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: participantSid,
+      endConferenceOnExit: true,
+    };
+    const context = {
+      getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
+    };
+
+    const participant = await updateParticipant({ context, ...parameters });
+
+    expect(participant).toEqual({
+      success: true,
+      callSid: mockCallSid,
+      status: 200,
+    });
+    expect(holdUpdateParticipant.mock.calls.length).toBe(1);
+    expect(holdUpdateParticipant.mock.calls[0][0]).toStrictEqual({
+      endConferenceOnExit: true,
+    });
+  });
+
+  it('updateParticipant throws invalid parameters object passed', async () => {
+    const {
+      updateParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: participantSid,
+      endConferenceOnExit: true,
+    };
+
+    let err = null;
+    try {
+      await updateParticipant({ ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain reason context object');
+  });
+
+  it('updateParticipant throws invalid parameters object passed', async () => {
+    const {
+      updateParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: 1,
+      participant: participantSid,
+      endConferenceOnExit: true,
+    };
+    const context = {
+      getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
+    };
+
+    let err = null;
+    try {
+      await updateParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain conference string');
+  });
+
+  it('updateParticipant throws invalid parameters object passed', async () => {
+    const {
+      updateParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: 1,
+      endConferenceOnExit: true,
+    };
+    const context = {
+      getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
+    };
+
+    let err = null;
+    try {
+      await updateParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain participant string');
+  });
+
+  it('updateParticipant throws invalid parameters object passed', async () => {
+    const {
+      updateParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: participantSid,
+      endConferenceOnExit: 1,
+    };
+    const context = {
+      getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
+    };
+
+    let err = null;
+    try {
+      await updateParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain endConferenceOnExit boolean');
   });
 });
 
-test('updateParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: participantSid,
-    endConferenceOnExit: true,
-  };
-
-  let err = null;
-  try {
-    await updateParticipant({ ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain reason context object');
-});
-
-test('updateParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: 1,
-    participant: participantSid,
-    endConferenceOnExit: true,
-  };
-  const context = {
-    getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
-  };
-
-  let err = null;
-  try {
-    await updateParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain conference string');
-});
-
-test('updateParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: 1,
-    endConferenceOnExit: true,
-  };
-  const context = {
-    getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
-  };
-
-  let err = null;
-  try {
-    await updateParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain participant string');
-});
-
-test('updateParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: participantSid,
-    endConferenceOnExit: 1,
-  };
-  const context = {
-    getTwilioClient: () => getHolUpdateParticipantMockTwilioClient(holdUpdateParticipant),
-  };
-
-  let err = null;
-  try {
-    await updateParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
-
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain endConferenceOnExit boolean');
-});
-
-test('removeParticipant returns success response', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: participantSid,
-  };
-  const context = {
-    getTwilioClient: () => getRemoveParticipantMockTwilioClient(removeParticipantMock),
-  };
-
-  const participant = await removeParticipant({ context, ...parameters });
-
-  expect(participant).toEqual({
-    success: true,
-    status: 200,
+describe('removeParticipant tests from ConferenceParticipant', () => {
+  beforeAll(() => {
+    setup();
+    global.Runtime._addFunction(
+      'twilio-wrappers/retry-handler',
+      './serverless/src/functions/twilio-wrappers/retry-handler.private.js',
+    );
   });
-  expect(removeParticipantMock.mock.calls.length).toBe(1);
-});
-
-test('removeParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: participantSid,
+  const removeParticipantMock = jest.fn(() => Promise.resolve());
+  const getRemoveParticipantMockTwilioClient = function (removeParticipant) {
+    const mockConferenceService = {
+      participants: (_partSid) => ({
+        remove: removeParticipant,
+      }),
+    };
+    return {
+      conferences: (_taskSid) => mockConferenceService,
+    };
   };
 
-  let err = null;
-  try {
-    await removeParticipant({ ...parameters });
-  } catch (error) {
-    err = error;
-  }
+  it('removeParticipant returns success response', async () => {
+    const {
+      removeParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: participantSid,
+    };
+    const context = {
+      getTwilioClient: () => getRemoveParticipantMockTwilioClient(removeParticipantMock),
+    };
 
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain reason context object');
-});
+    const participant = await removeParticipant({ context, ...parameters });
 
-test('removeParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: 1,
-    participant: participantSid,
-  };
-  const context = {
-    getTwilioClient: () => getRemoveParticipantMockTwilioClient(removeParticipantMock),
-  };
+    expect(participant).toEqual({
+      success: true,
+      status: 200,
+    });
+    expect(removeParticipantMock.mock.calls.length).toBe(1);
+  });
 
-  let err = null;
-  try {
-    await removeParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
+  it('removeParticipant throws invalid parameters object passed', async () => {
+    const {
+      removeParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: participantSid,
+    };
 
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain conference string');
-});
+    let err = null;
+    try {
+      await removeParticipant({ ...parameters });
+    } catch (error) {
+      err = error;
+    }
 
-test('removeParticipant throws invalid parameters object passed', async () => {
-  const parameters = {
-    conference: taskSid,
-    participant: 1,
-  };
-  const context = {
-    getTwilioClient: () => getRemoveParticipantMockTwilioClient(removeParticipantMock),
-  };
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain reason context object');
+  });
 
-  let err = null;
-  try {
-    await removeParticipant({ context, ...parameters });
-  } catch (error) {
-    err = error;
-  }
+  it('removeParticipant throws invalid parameters object passed', async () => {
+    const {
+      removeParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: 1,
+      participant: participantSid,
+    };
+    const context = {
+      getTwilioClient: () => getRemoveParticipantMockTwilioClient(removeParticipantMock),
+    };
 
-  expect(err).toBe('Invalid parameters object passed. Parameters must contain participant string');
+    let err = null;
+    try {
+      await removeParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain conference string');
+  });
+
+  it('removeParticipant throws invalid parameters object passed', async () => {
+    const {
+      removeParticipant,
+    } = require('../../../serverless/src/functions/twilio-wrappers/conference-participant.private');
+    const parameters = {
+      conference: taskSid,
+      participant: 1,
+    };
+    const context = {
+      getTwilioClient: () => getRemoveParticipantMockTwilioClient(removeParticipantMock),
+    };
+
+    let err = null;
+    try {
+      await removeParticipant({ context, ...parameters });
+    } catch (error) {
+      err = error;
+    }
+
+    expect(err).toBe('Invalid parameters object passed. Parameters must contain participant string');
+  });
 });

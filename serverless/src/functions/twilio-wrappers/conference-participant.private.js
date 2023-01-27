@@ -1,6 +1,6 @@
 const { isString, isObject, isNumber, isBoolean } = require('lodash');
 
-// const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
+const { retryHandler } = require(Runtime.getFunctions()['twilio-wrappers/retry-handler'].path);
 
 /**
  * @param {object} parameters the parameters for the function
@@ -32,7 +32,7 @@ exports.addParticipant = async (parameters) => {
 
     return { success: true, callSid: participantsResponse.callSid, status: 200 };
   } catch (error) {
-    // return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, arguments.callee);
   }
 };
 
@@ -63,7 +63,7 @@ exports.holdParticipant = async (parameters) => {
 
     return { success: true, callSid: participantsResponse.callSid, status: 200 };
   } catch (error) {
-    // return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, arguments.callee);
   }
 };
 
@@ -90,7 +90,7 @@ exports.removeParticipant = async (parameters) => {
 
     return { success: true, status: 200 };
   } catch (error) {
-    // return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, arguments.callee);
   }
 };
 
@@ -122,6 +122,6 @@ exports.updateParticipant = async (parameters) => {
 
     return { success: true, callSid: participantsResponse.callSid, status: 200 };
   } catch (error) {
-    // return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, arguments.callee);
   }
 };

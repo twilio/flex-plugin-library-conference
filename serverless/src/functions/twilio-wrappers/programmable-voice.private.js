@@ -1,8 +1,6 @@
 const { isString, isObject } = require('lodash');
 
-// const retryHandler = require(Runtime.getFunctions()[
-//   "common/twilio-wrappers/retry-handler"
-// ].path).retryHandler;
+const retryHandler = require(Runtime.getFunctions()['twilio-wrappers/retry-handler'].path).retryHandler;
 
 /**
  * @param {object} parameters the parameters for the function
@@ -25,6 +23,6 @@ exports.fetchProperties = async (parameters) => {
 
     return { success: true, callProperties, status: 200 };
   } catch (error) {
-    // return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, arguments.callee);
   }
 };
