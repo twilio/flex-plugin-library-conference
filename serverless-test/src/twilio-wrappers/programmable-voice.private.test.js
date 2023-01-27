@@ -18,21 +18,21 @@ describe('fetchProperties tests from PrpgrammableVoice', () => {
       calls: (_callSid) => mockVoiceService,
     };
   };
-  const fetchProperties = jest.fn(() => Promise.resolve());
-  // it('fetchProperties returns success response', async () => {
-  //   const { fetchProperties } = require('../../../serverless/src/functions/twilio-wrappers/programmable-voice.private');
-  //   const parameters = {
-  //     callSid,
-  //   };
-  //   const context = {
-  //     getTwilioClient: () => getVoiceMockTwilioClient(fetchProperties),
-  //   };
+  const fetchPropertiesMock = jest.fn(() => Promise.resolve());
+  it('fetchProperties returns success response', async () => {
+    const { fetchProperties } = require('../../../serverless/src/functions/twilio-wrappers/programmable-voice.private');
+    const parameters = {
+      callSid,
+    };
+    const context = {
+      getTwilioClient: () => getVoiceMockTwilioClient(fetchPropertiesMock),
+    };
 
-  //   const participant = await fetchProperties({ context, ...parameters });
+    const participant = await fetchProperties({ context, ...parameters });
 
-  //   expect(participant.success).toEqual(true);
-  //   expect(fetchProperties.mock.calls.length).toBe(1);
-  // });
+    expect(participant.success).toEqual(true);
+    expect(fetchPropertiesMock.mock.calls.length).toBe(1);
+  });
 
   it('fetchProperties throws invalid parameters object passed', async () => {
     const { fetchProperties } = require('../../../serverless/src/functions/twilio-wrappers/programmable-voice.private');
@@ -56,7 +56,7 @@ describe('fetchProperties tests from PrpgrammableVoice', () => {
       callSid: 1,
     };
     const context = {
-      getTwilioClient: () => getVoiceMockTwilioClient(fetchProperties),
+      getTwilioClient: () => getVoiceMockTwilioClient(fetchPropertiesMock),
     };
 
     let err = null;

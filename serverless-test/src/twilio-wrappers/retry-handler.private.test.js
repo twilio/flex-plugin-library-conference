@@ -2,9 +2,13 @@ import RetryHandler from '../../../serverless/src/functions/twilio-wrappers/retr
 
 describe('Retry Handler', () => {
   const OLD_ENV = process.env;
+
   beforeEach(() => {
     jest.resetModules(); // Most important - it clears the cache
     process.env = { ...OLD_ENV }; // Make a copy
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterAll(() => {
@@ -29,7 +33,7 @@ describe('Retry Handler', () => {
     };
     const mockParameters = {
       attempts: 4,
-      context: {},
+      context: { PATH: 'mockPath' },
     };
     process.env.TWILIO_SERVICE_RETRY_LIMIT = 3;
 
@@ -46,7 +50,7 @@ describe('Retry Handler', () => {
     };
     const mockParameters = {
       attempts: 0,
-      context: {},
+      context: { PATH: 'mockPath' },
     };
     const mockCallback = (params) => {
       expect(params).toEqual({ ...mockParameters, attempts: 1 });

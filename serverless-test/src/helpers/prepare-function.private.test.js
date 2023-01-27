@@ -18,6 +18,12 @@ describe('Prepare Flex Function', () => {
     });
   });
 
+  beforeEach(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
   it('prepareFlexFunction is called successfully ', () => {
     const PrepareFunction = require('../../../serverless/src/functions/helpers/prepare-function.private');
     const spyMethod = jest.spyOn(PrepareFunction, 'prepareFlexFunction');
@@ -41,6 +47,11 @@ describe('Prepare Function', () => {
       'helpers/parameter-validator',
       './serverless/src/functions/helpers/parameter-validator.private.js',
     );
+  });
+  beforeEach(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
   });
   const mockContext = {
     PATH: 'mockPath',

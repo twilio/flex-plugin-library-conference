@@ -1,12 +1,9 @@
 import helpers from '../../test-utils/test-helper';
 
-jest.mock(
-  '/Users/hsingla/code/workspace/flex-conference-plugin/serverless/src/functions/helpers/prepare-function.private.js',
-  () => ({
-    __esModule: true,
-    prepareFlexFunction: (_, fn) => fn,
-  }),
-);
+jest.mock('serverless/src/functions/helpers/prepare-function.private.js', () => ({
+  __esModule: true,
+  prepareFlexFunction: (_, fn) => fn,
+}));
 
 const mockCallSid = 'CSxxxxx';
 describe('Remove Participant', () => {
