@@ -4,15 +4,9 @@
   https://github.com/trogers-twilio/plugin-external-conference-warm-transfer
 
 */
-import { ConferenceParticipant } from '@twilio/flex-ui';
 import ApiService from './ApiService';
 import { EncodedParams } from '../types/Params';
 import { FetchedCall, FetchedConferenceParticipant } from '../types/twilio-api';
-import {
-  ParticipantBase,
-  ParticipantTypes,
-  VoiceProperties,
-} from '@twilio/flex-ui/src/state/Participants/participants.types';
 
 export interface GetCallResponse {
   success: boolean;
@@ -21,7 +15,7 @@ export interface GetCallResponse {
 
 export interface ParticipantResponse {
   success: boolean;
-  participantsResponse: FetchedConferenceParticipant;
+  callSid: string;
 }
 
 export interface RemoveParticipantResponse {
@@ -38,17 +32,14 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token),
       };
 
-      this.fetchJsonWithReject<ParticipantResponse>(
-        `${this.serverlessDomain}/common/flex/programmable-voice/hold-participant`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: this.buildBody(encodedParams),
-        },
-      )
+      this.fetchJsonWithReject<ParticipantResponse>(`${this.serverlessDomain}/conference/hold-participant`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      })
         .then((response: ParticipantResponse) => {
           console.log(`${hold ? 'Hold' : 'Unhold'} successful for participant`, participantSid);
-          resolve(response.participantsResponse.callSid);
+          resolve(response.callSid);
         })
         .catch((error) => {
           console.error(`Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`, error);
@@ -70,17 +61,14 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token),
       };
 
-      this.fetchJsonWithReject<ParticipantResponse>(
-        `${this.serverlessDomain}/common/flex/programmable-voice/update-participant`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: this.buildBody(encodedParams),
-        },
-      )
+      this.fetchJsonWithReject<ParticipantResponse>(`${this.serverlessDomain}/conference/update-participant`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      })
         .then((response: ParticipantResponse) => {
           console.log(`Participant ${participantSid} updated:\r\n`, response);
-          resolve(response.participantsResponse.callSid);
+          resolve(response.callSid);
         })
         .catch((error) => {
           console.error(`Error updating participant ${participantSid}\r\n`, error);
@@ -98,17 +86,14 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token),
       };
 
-      this.fetchJsonWithReject<ParticipantResponse>(
-        `${this.serverlessDomain}/common/flex/programmable-voice/add-participant`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: this.buildBody(encodedParams),
-        },
-      )
+      this.fetchJsonWithReject<ParticipantResponse>(`${this.serverlessDomain}/conference/add-participant`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      })
         .then((response: ParticipantResponse) => {
           console.log('Participant added:\r\n  ', response);
-          resolve(response.participantsResponse.callSid);
+          resolve(response.callSid);
         })
         .catch((error) => {
           console.log('There is an error while adding participan', error);
@@ -133,14 +118,11 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token),
       };
 
-      this.fetchJsonWithReject<RemoveParticipantResponse>(
-        `${this.serverlessDomain}/common/flex/programmable-voice/remove-participant`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: this.buildBody(encodedParams),
-        },
-      )
+      this.fetchJsonWithReject<RemoveParticipantResponse>(`${this.serverlessDomain}/conference/remove-participant`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      })
         .then((response: RemoveParticipantResponse) => {
           console.log(`Participant ${participantSid} removed from conference`);
           resolve(participantSid);
@@ -159,14 +141,11 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token),
       };
 
-      this.fetchJsonWithReject<GetCallResponse>(
-        `${this.serverlessDomain}/common/flex/programmable-voice/get-call-properties`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: this.buildBody(encodedParams),
-        },
-      )
+      this.fetchJsonWithReject<GetCallResponse>(`${this.serverlessDomain}/conference/get-call-properties`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      })
         .then((resp: GetCallResponse) => {
           console.log('The call properties are', resp.callProperties);
           resolve(resp.callProperties);

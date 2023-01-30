@@ -1,4 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
+import React from 'react';
 import ConnectingParticipants from '../../components/ConnectingParticipants';
 import ParticipantActionsButtons from '../../components/ParticipantActionsButtons';
 import ParticipantName from '../../components/ParticipantName';

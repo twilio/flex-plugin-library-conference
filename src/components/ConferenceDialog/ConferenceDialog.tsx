@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Actions, Manager, ITask, withTaskContext, useFlexSelector } from '@twilio/flex-ui';
+import { Actions, Manager, ITask, useFlexSelector } from '@twilio/flex-ui';
 import { useDispatch } from 'react-redux';
 import { AppState } from '../../flex-hooks/states/ConferenceSlice'
 import ConferenceService from '../../service/ConferenceService';
@@ -112,6 +112,7 @@ const ConferenceDialog = (props: OwnProps) => {
       // set initial focus here
       initialFocusRef={inputRef}
       size="default"
+      data-testid="modal-header"
     >
       <ModalHeader>
         <ModalHeading as="h3" id={modalHeadingID}>
@@ -134,10 +135,10 @@ const ConferenceDialog = (props: OwnProps) => {
       </ModalBody>
       <ModalFooter>
         <ModalFooterActions>
-          <Button variant="secondary" onClick={handleButtonClose}>
+          <Button variant="secondary" onClick={handleButtonClose} title="Cancel">
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleDialButton}>
+          <Button variant="primary" onClick={handleDialButton} title="Dial">
             Dial
           </Button>
         </ModalFooterActions>
@@ -146,4 +147,4 @@ const ConferenceDialog = (props: OwnProps) => {
   );
 }
 
-export default withTaskContext(ConferenceDialog);
+export default ConferenceDialog;

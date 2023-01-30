@@ -16,7 +16,7 @@ interface ServiceConfigurationUpdate extends Flex.ServiceConfiguration {
   ui_attributes: Partial<UIAttributes>;
 }
 
-let mockedServiceConfiguration: ServiceConfiguration = {
+let mockedServiceConfiguration: Flex.ServiceConfiguration = {
   account_sid: 'mockAccountSid',
   attributes: {},
   call_recording_enabled: false,
@@ -43,10 +43,7 @@ let mockedServiceConfiguration: ServiceConfiguration = {
   taskrouter_worker_attributes: null,
   taskrouter_worker_channels: null,
   taskrouter_workspace_sid: 'mockTaskrouterWorkspaceSid',
-  ui_attributes: {
-    serverless_functions_domain: 'mockServerlessFunctionsDomain',
-    custom_data: {},
-  },
+  ui_attributes: {},
   ui_language: 'mockUiLanguage',
   ui_version: 'mockUiVersion',
   url: 'mockUrl',
@@ -64,6 +61,9 @@ let mockedServiceConfiguration: ServiceConfiguration = {
   public_attributes: {},
   serverless_service_sids: [],
   ui_dependencies: {},
+  channel_configs: null,
+  debugger_integration: null,
+  flex_ui_status_report: null,
 };
 
 export const getMockedServiceConfiguration = () => mockedServiceConfiguration as Flex.ServiceConfiguration;
@@ -95,10 +95,7 @@ export const resetServiceConfiguration = () => {
     taskrouter_worker_attributes: null,
     taskrouter_worker_channels: null,
     taskrouter_workspace_sid: 'mockTaskrouterWorkspaceSid',
-    ui_attributes: {
-      serverless_functions_domain: 'mockServerlessFunctionsDomain',
-      custom_data: {},
-    },
+    ui_attributes: {},
     ui_language: 'mockUiLanguage',
     ui_version: 'mockUiVersion',
     url: 'mockUrl',
@@ -116,6 +113,9 @@ export const resetServiceConfiguration = () => {
     public_attributes: {},
     serverless_service_sids: [],
     ui_dependencies: {},
+    channel_configs: null,
+    debugger_integration: null,
+    flex_ui_status_report: null,
   };
 };
 export const setServiceConfiguration = (serviceConfiguration: Partial<ServiceConfigurationUpdate>) => {
