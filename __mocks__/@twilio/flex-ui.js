@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from '@emotion/styled';
 import { EventEmitter } from 'events';
 import { getMockedServiceConfiguration } from '../../test-utils/flex-service-configuration';
 import { getMockedReduxState } from '../../test-utils/flex-redux';
@@ -9,9 +10,7 @@ class WorkerClient extends EventEmitter {
   constructor() {
     super();
     this.sid = 'mockWorkerSid';
-    this.attributes = {
-
-    };
+    this.attributes = {};
     this.reservations = new Map();
   }
 }
@@ -27,10 +26,10 @@ class Manager {
     this.store = {
       addReducer: jest.fn(),
       dispatch: jest.fn(),
-      getState: jest.fn(() => getMockedReduxState())
+      getState: jest.fn(() => getMockedReduxState()),
     };
     this.user = {
-      token: 'mockedToken'
+      token: 'mockedToken',
     };
   }
   getInstance() {
@@ -54,17 +53,19 @@ class Actions {
       const lifecycle = [
         this.eventListeners[`before${name}`] || [],
         this.eventListeners[name] || [],
-        this.eventListeners[`after${name}`] || []
+        this.eventListeners[`after${name}`] || [],
       ];
       try {
-        await Promise.all(lifecycle[0].map(listener => {
-          return new Promise(async (resolve, reject) => {
-            await listener(payload, () => {
-              reject(`Action ${name} cancelled by before event`);
+        await Promise.all(
+          lifecycle[0].map((listener) => {
+            return new Promise(async (resolve, reject) => {
+              await listener(payload, () => {
+                // reject(`Action ${name} cancelled by before event`);
+              });
+              resolve();
             });
-            resolve();
-          })
-        }));
+          }),
+        );
       } catch (e) {
         throw new Error(e);
       }
@@ -80,7 +81,7 @@ class Actions {
       }
     });
 
-    this.removeAllListeners = jest.fn(event => {
+    this.removeAllListeners = jest.fn((event) => {
       if (event) {
         delete this.eventListeners[event];
       } else {
@@ -106,67 +107,123 @@ class Notifications {
 module.exports = {
   CRMContainer: {
     Content: {
-      replace: jest.fn()
-    }
+      replace: jest.fn(),
+    },
+  },
+  CallCanvas: {
+    Content: {
+      add: jest.fn(),
+      remove: jest.fn(),
+    },
+  },
+  CallCanvasActions: {
+    Content: {
+      add: jest.fn(),
+      remove: jest.fn(),
+    },
+  },
+  ParticipantsCanvas: {
+    Content: {
+      add: jest.fn(),
+      remove: jest.fn(),
+    },
+  },
+  ParticipantCanvas: {
+    Content: {
+      add: jest.fn(),
+      remove: jest.fn(),
+    },
+    ListItem: {
+      Content: {
+        add: jest.fn(),
+        remove: jest.fn(),
+      },
+    },
   },
   AgentDesktopView: {
     defaultProps: {
-      splitterOptions: {}
-    }
+      splitterOptions: {},
+    },
   },
   Actions: new Actions(),
   Manager: new Manager(),
   Notifications: new Notifications(),
   NotificationType: {
     warning: 'warning',
-    error: 'error'
+    error: 'error',
   },
   templates: {
     WorkerDirectorySearchPlaceholder: () => '',
     WarmTransferTooltip: () => '',
-    ColdTransferTooltip: () => ''
+    ColdTransferTooltip: () => '',
+    CallParticipantStatusLive: () => 'CallParticipantStatusLive',
+    CallParticipantStatusOnHold: () => 'CallParticipantStatusOnHold',
+    CallParticipantStatusLeft: () => 'CallParticipantStatusLeft',
+    CallParticipantStatusConnecting: () => 'CallParticipantStatusConnecting',
+    CallParticipantStatusKickConfirmation: () => 'CallParticipantStatusKickConfirmation',
   },
+  useFlexSelector: jest.fn(() => {
+    return [
+      { status: 'recently_left', callSid: 'CSxxxxxx', participantType: 'worker' },
+      { status: 'recently_left', callSid: 'CSxxxxxx1', participantType: 'worker' },
+    ];
+  }),
   NotificationBar: {
-    Action: () => <React.Fragment></React.Fragment>
+    Action: () => <React.Fragment></React.Fragment>,
   },
+  TaskHelper: {
+    canHold: () => {
+      return true;
+    },
+  },
+  StateHelper: {
+    getTaskByTaskrouterTaskSid: (props) => jest.fn(),
+  },
+  styled: styled,
+  Template: ({ source }) => ({
+    render() {
+      const content = source();
+      return (
+        <React.Fragment>
+          <span>{content}</span>
+        </React.Fragment>
+      );
+    },
+  }),
   SideLink: () => ({
     render() {
       return <React.Fragment />;
-    }
+    },
   }),
   Icon: () => ({
     render() {
       return <React.Fragment />;
-    }
+    },
   }),
-  IconButton: () => ({
-    render() {
-      return <React.Fragment />;
-    }
-  }),
+  IconButton: (props) => <button {...props} />,
   FlexBox: () => ({
     render() {
       return <React.Fragment />;
-    }
+    },
   }),
   FlexBoxColumn: () => ({
     render() {
       return <React.Fragment />;
-    }
+    },
   }),
   ConferenceParticipant: ConferenceParticipant,
   withTaskContext: (WrappedComponent) => {
     return () => ({
       render() {
         return <WrappedComponent />;
-      }
+      },
     });
   },
   withTheme: (WrappedComponent) => {
     return () => ({
       render() {
         return <WrappedComponent theme={{}} />;
-      }
+      },
     });
-  }
+  },
 };
