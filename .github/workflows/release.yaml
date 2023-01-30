@@ -14,9 +14,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '14'
-      - run: npm install
+
       - run: npm install -g twilio-cli
       - run: twilio plugins:install @twilio-labs/plugin-flex
+      - run: npm install
 
       - name: Create bundle
         run: npm run build
