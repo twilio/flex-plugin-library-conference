@@ -19,8 +19,6 @@ export default abstract class ApiService {
 
     if (process.env?.FLEX_APP_SERVERLESS_FUNCTONS_DOMAIN)
       this.serverlessDomain = process.env?.FLEX_APP_SERVERLESS_FUNCTONS_DOMAIN;
-
-    // if (!this.serverlessDomain) console.error('serverless_functions_domain is not set in flex config or env file');
   }
 
   protected buildBody(encodedParams: EncodedParams): string {
@@ -45,7 +43,7 @@ export default abstract class ApiService {
       })
       .catch(async (error) => {
         try {
-          if (error.status === 429 && attempts < 10) {
+          if (error.status === 429 && attempts < 3) {
             await delay(random(10, 50) + attempts * 100);
             return await this.fetchJsonWithReject<T>(url, config, attempts + 1);
           }

@@ -65,6 +65,9 @@ pluginsService.js
 build/
 
 
+# JUnit.xml
+junit.xml
+
 
 ### Linux ###
 *~

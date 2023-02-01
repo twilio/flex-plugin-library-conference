@@ -58,6 +58,5 @@ describe('Retry Handler', () => {
     process.env.TWILIO_SERVICE_RETRY_LIMIT = 3;
 
     await RetryHandler.retryHandler(errorMock, mockParameters, mockCallback);
-    // expect(reponse).toEqual({ success: false, message: 'mockMessage', status: 400 });
   });
 });

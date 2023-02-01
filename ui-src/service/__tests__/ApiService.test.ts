@@ -27,12 +27,6 @@ describe('utils/common/ApiService', () => {
     expect(TestService.testHasManagerClassMember()).toBe(true);
   });
 
-  // it('should provide access to the configured serverless domain', () => {
-  //   const { serviceConfiguration: { ui_attributes } } = Flex.Manager.getInstance();
-  //   const { serverless_functions_domain } = ui_attributes as UIAttributes;
-  //   expect(TestService.serverlessDomain).toBe(serverless_functions_domain);
-  // });
-
   it('should build encoded params into a string to use as the body for serverless reqeusts', () => {
     const encodedParams: EncodedParams = {
       testParam1: encodeURIComponent('testParam1ToBeEncoded'),
@@ -73,7 +67,7 @@ describe('utils/common/ApiService', () => {
       try {
         await TestService.testFetchJsonWithReject('mockURL', {}, 0);
       } catch (e) {
-        expect(fetchSpy).toHaveBeenCalledTimes(11);
+        expect(fetchSpy).toHaveBeenCalledTimes(4);
       }
     });
   });

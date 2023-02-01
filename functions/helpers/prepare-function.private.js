@@ -40,6 +40,7 @@ exports.prepareFunction = (context, event, callback, requiredParameters, handler
  * @param handlerFn             the Twilio Runtime handler function to execute
  */
 exports.prepareFlexFunction = (requiredParameters, handlerFn) => {
+  console.log(TokenValidator);
   return TokenValidator((context, event, callback) =>
     prepareFunction(context, event, callback, requiredParameters, handlerFn),
   );
