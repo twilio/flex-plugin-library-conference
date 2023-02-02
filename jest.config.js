@@ -1,8 +1,5 @@
 module.exports = {
-  // testEnvironment: 'node',
-  transform: {
-    '^.+\\.(t|j)sx?$': 'ts-jest',
-  },
+  rootDir: '.',
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   modulePathIgnorePatterns: ['<rootDir>/dist'],
@@ -12,7 +9,7 @@ module.exports = {
   collectCoverageFrom: ['**/*.{js,jsx,ts,tsx}'],
   coveragePathIgnorePatterns: [
     '.*\\.d\\.ts',
-    'index\\.ts',
+    '/components/.*./index\\.ts',
     'polyfilled\\.ts',
     'createAction.ts',
     'jest.config.js',
@@ -21,8 +18,13 @@ module.exports = {
     './public',
     '/test-utils',
     '/types',
+    '/strings',
+    '/utils',
   ],
-  restoreMocks: true,
+  coverageReporters: ['json', 'lcov', 'text', 'clover', 'cobertura'],
+  testResultsProcessor: 'jest-junit',
+  reporters: ['default', 'jest-junit'],
   clearMocks: true,
-  // setupFilesAfterEnv: ['<rootDir>/setupTests.js'],
+  automock: false,
+  testTimeout: 15000,
 };

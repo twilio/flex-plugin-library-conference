@@ -20,6 +20,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": ["./src/**/*"],
+  "include": ["ui-src/components"],
   "exclude": ["./**/*.test.ts", "./**/*.test.tsx", "./**/__mocks__/*.ts", "./**/__mocks__/*.tsx"]
 }

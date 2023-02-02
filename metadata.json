@@ -1,0 +1,24 @@
+{
+    "name":"flex-conference-plugin",
+    "friendly_name" :"Conference Dialpad Addon",
+    "description":"When in a call, a 'plus' icon is added to the Call Canvas where you can add a external number to the call.",
+    "support":"abc@gmail.com",
+    "created_by":"Twilio",
+    "twilio_managed":"true",
+    "repo_url" : "https://github.com/twilio/flex-conference-plugin/",
+    "version_details" : {
+      "version":"1.0.0",
+      "compatible_with":"2.0.0 - 2.0.2",
+      "released_by":"flex-runtime-team",
+      "changelog":"",
+      "prerequisite" : "2.0.0",
+      "attributes" : [{
+        "name": "TWILIO_FLEX_WORKSPACE_SID",
+        "data_type": "string",
+        "type":"SERVERLESS",
+        "description" : "Flex Voice Workspace SID",
+        "help_link" : ""
+      }
+      ]
+    }
+   }
