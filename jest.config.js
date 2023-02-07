@@ -20,6 +20,8 @@ module.exports = {
     '/types',
     '/strings',
     '/utils',
+    '/build',
+    'assets',
   ],
   coverageReporters: ['json', 'lcov', 'text', 'clover', 'cobertura'],
   testResultsProcessor: 'jest-junit',

@@ -8,8 +8,8 @@ exports.prepareFunction = (context, event, callback, requiredParameters, handler
 
   response.appendHeader('Access-Control-Allow-Origin', '*');
   response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS, POST, GET');
-  response.appendHeader('Content-Type', 'application/json');
   response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+  response.appendHeader('Content-Type', 'application/json');
 
   if (parameterError) {
     console.error(`(${context.PATH}) invalid parameters passed`);
@@ -40,8 +40,7 @@ exports.prepareFunction = (context, event, callback, requiredParameters, handler
  * @param handlerFn             the Twilio Runtime handler function to execute
  */
 exports.prepareFlexFunction = (requiredParameters, handlerFn) => {
-  console.log(TokenValidator);
   return TokenValidator((context, event, callback) =>
-    prepareFunction(context, event, callback, requiredParameters, handlerFn),
+    module.exports.prepareFunction(context, event, callback, requiredParameters, handlerFn),
   );
 };

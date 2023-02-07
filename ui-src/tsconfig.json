@@ -16,10 +16,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react",
+    "jsx": "preserve",
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": ["ui-src/components"],
+  "include": ["./src/**/*"],
   "exclude": ["./**/*.test.ts", "./**/*.test.tsx", "./**/__mocks__/*.ts", "./**/__mocks__/*.tsx"]
 }
