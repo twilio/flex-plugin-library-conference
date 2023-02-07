@@ -1,10 +1,8 @@
 import React from 'react';
-import '@testing-library/jest-dom';
-import * as Flex from '@twilio/flex-ui';
-import ParticipantName from '../ParticipantName';
 import { render } from '@testing-library/react';
-import fetch from 'jest-fetch-mock';
 import '@testing-library/jest-dom';
+import fetch from 'jest-fetch-mock';
+import ParticipantName from '../ParticipantName';
 
 describe('ParticipantName', () => {
   beforeAll(() => {
