@@ -11,7 +11,7 @@
       "compatible_with":"2.0.0 - 2.0.2",
       "released_by":"flex-runtime-team",
       "changelog":"",
-      "prerequisite" : "2.0.0",
+      "prerequisite" : "Dialpad Addon should be enabled for the Flex account before this plugin.",
       "attributes" : [{
         "name": "TWILIO_FLEX_WORKSPACE_SID",
         "data_type": "string",
