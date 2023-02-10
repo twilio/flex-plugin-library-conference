@@ -5,6 +5,9 @@ on:
     types: [opened, reopened, synchronize]
     branches:
       - main
+    paths:
+      - 'ui-src/*'
+      - 'functions/*'
 
 jobs:
   versionCheck:
