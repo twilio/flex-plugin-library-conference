@@ -1,4 +1,4 @@
-name: Tag the main branch
+name: Tag main branch
 
 on: [workflow_dispatch]
 
