@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/checkout@v3
         with:
-          ref: master
+          ref: main
       - name: Get package json of main
         id: mainPackageJson
         run: |
@@ -28,8 +28,8 @@ jobs:
       - name: Find versions
         id: versions
         run: |
-          echo "branchPackageVersion=${{ fromJson(steps.mainPackageJson.outputs.mainPackageJson).version }}" >> $GITHUB_OUTPUT
-          echo "mainPackageVersion=${{ fromJson(steps.branchPackageJson.outputs.branchPackageJson).version }}" >> $GITHUB_OUTPUT
+          echo "branchPackageVersion=${{ fromJson(steps.branchPackageJson.outputs.branchPackageJson).version }}" >> $GITHUB_OUTPUT
+          echo "mainPackageVersion=${{ fromJson(steps.mainPackageJson.outputs.mainPackageJson).version }}" >> $GITHUB_OUTPUT
 
       - name: Package version needs to be updated
         if: ${{ steps.versions.outputs.branchPackageVersion == steps.versions.outputs.mainPackageVersion}}
