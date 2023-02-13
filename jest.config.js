@@ -5,7 +5,7 @@ module.exports = {
   modulePathIgnorePatterns: ['<rootDir>/dist'],
   testPathIgnorePatterns: ['<rootDir>/dist/'],
   coverageDirectory: './coverage/',
-  collectCoverage: false,
+  collectCoverage: true,
   collectCoverageFrom: ['**/*.{js,jsx,ts,tsx}'],
   coveragePathIgnorePatterns: [
     '.*\\.d\\.ts',
@@ -26,7 +26,7 @@ module.exports = {
   coverageReporters: ['json', 'lcov', 'text', 'clover', 'cobertura'],
   testResultsProcessor: 'jest-junit',
   reporters: ['default', 'jest-junit'],
-  // clearMocks: true,
-  // automock: false,
+  clearMocks: true,
+  automock: false,
   testTimeout: 15000,
 };

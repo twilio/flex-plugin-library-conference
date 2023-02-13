@@ -1,12 +1,9 @@
 import React from 'react';
-// import * as jest from 'jest';
-// import styled from '@emotion/styled';
+import styled from '@emotion/styled';
 import { EventEmitter } from 'events';
 import { getMockedServiceConfiguration } from '../../test-utils/flex-service-configuration';
 import { getMockedReduxState } from '../../test-utils/flex-redux';
 
-// We need to mock anything our plugin uses from @twilio/flex-ui here
-// const { styled } = jest.requireActual('@twilio/flex-ui');
 class WorkerClient extends EventEmitter {
   constructor() {
     super();
@@ -180,7 +177,7 @@ module.exports = {
   StateHelper: {
     getTaskByTaskrouterTaskSid: (props) => jest.fn(),
   },
-  // styled: jest.requireActual('@twilio/flex-ui'),
+  styled: styled,
   Template: ({ source }) => ({
     render() {
       const content = source();
