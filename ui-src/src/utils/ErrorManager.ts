@@ -1,3 +1,6 @@
+import * as Flex from '@twilio/flex-ui';
+import { ConferenceNotification } from '../flex-hooks/notifications/Conference';
+
 export enum FlexPluginErrorType {
   action = 'ActionFramework',
   serverless = 'Serverless',
@@ -25,42 +28,27 @@ export class FlexPluginError extends Error {
 
   public time: Date;
 
-  public logManagerTimestamp: string | undefined;
-
   constructor(message: string, content: FlexPluginErrorContents = {}) {
     super(message);
     this.content = {
       ...content,
-      type: content.type || 'CallbackAndVoicemail',
+      type: content.type || 'ConferencePlugin',
       severity: content.severity || FlexErrorSeverity.normal,
     };
     this.time = new Date();
     Object.setPrototypeOf(this, FlexPluginError.prototype);
   }
-
-  // public get logLine(): string {
-  //     const { description, context, wrappedError } = this.content;
-  //     const message = description || this.message;
-  //     let wrappedErrorDescription = "";
-
-  //     if (wrappedError) {
-  //         if (wrappedError instanceof Error && wrappedError.message) {
-  //             wrappedErrorDescription = `\n\nOriginal error:\n"${wrappedError.message}"`;
-  //         } else if (typeof wrappedError === "string") {
-  //             wrappedErrorDescription = `\n\nOriginal error:\n"${wrappedError}"`;
-  //         }
-  //     }
-  //     const contextString = !!context ? `- ${context}` : "";
-
-  //     return `${this.time.toLocaleString()} ${contextString}: ${message}${wrappedErrorDescription}`;
-  // }
 }
 
 class ErrorManagerImpl {
-  public processError(error: FlexPluginError): FlexPluginError {
+  public processError(error: FlexPluginError, showNotification: boolean): FlexPluginError {
     try {
-      // log.error(error.logLine);
-      // Add telemetry code here
+      console.log(`Conference Plugin: ${error}\nType: ${error.content.type}\nContext:${error.content.context}`);
+      if (showNotification) {
+        Flex.Notifications.showNotification(ConferenceNotification.ErrorConference, {
+          error: error,
+        });
+      }
     } catch (e) {
       // Do not throw, let's avoid Inceptions
     }
@@ -68,9 +56,13 @@ class ErrorManagerImpl {
     return error;
   }
 
-  public createAndProcessError(message: string, content: FlexPluginErrorContents = {}): FlexPluginError {
+  public createAndProcessError(
+    message: string,
+    content: FlexPluginErrorContents = {},
+    showNotification: boolean = true,
+  ): FlexPluginError {
     const error = new FlexPluginError(message, content);
-    return this.processError(error);
+    return this.processError(error, showNotification);
   }
 }
 

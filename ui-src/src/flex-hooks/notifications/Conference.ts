@@ -3,12 +3,21 @@ import { StringTemplates } from '../strings/Conference';
 
 // Export the notification IDs an enum for better maintainability when accessing them elsewhere
 export enum ConferenceNotification {
-  FailedHangupNotification = 'PS_FailedHangupOnConferenceWithExternalParties',
+  FailedHangupNotification = 'FailedHangupOnConferenceWithExternalParties',
+  ErrorConference = 'ErrorConference',
 }
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   failedHangupNotification(flex, manager);
 };
+
+function errorNotification(flex: typeof Flex, manager: Flex.Manager) {
+  flex.Notifications.registerNotification({
+    id: ConferenceNotification.ErrorConference,
+    type: Flex.NotificationType.error,
+    content: StringTemplates.ErrorConference,
+  });
+}
 
 function failedHangupNotification(flex: typeof Flex, manager: Flex.Manager) {
   flex.Notifications.registerNotification({

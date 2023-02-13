@@ -29,7 +29,6 @@ export default class ConferencePlugin extends FlexPlugin {
    * @param flex { typeof Flex }
    */
   async init(flex: typeof Flex, manager: Flex.Manager): Promise<void> {
-
     const initializers = [
       AddReducers,
       ConfigureFlexStrings,
@@ -41,7 +40,7 @@ export default class ConferencePlugin extends FlexPlugin {
       handleConferenceHangup,
       handleHoldConferenceParticipant,
       handleKickConferenceParticipant,
-      handleUnholdConferenceParticipant
+      handleUnholdConferenceParticipant,
     ];
 
     initializers.forEach((initializer) => initializer(flex, manager));
