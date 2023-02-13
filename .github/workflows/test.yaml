@@ -5,6 +5,9 @@ on:
     types: [opened, reopened, synchronize]
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   test:
@@ -21,3 +24,5 @@ jobs:
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
