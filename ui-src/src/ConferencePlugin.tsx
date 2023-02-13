@@ -18,7 +18,7 @@ const PLUGIN_NAME = 'Conference';
 
 export default class ConferencePlugin extends FlexPlugin {
   constructor() {
-    console.log('Testing bundle creation when this line is updated !!!');
+    console.log('Testing bundle creation when this line is updated !');
     super(PLUGIN_NAME);
   }
 
