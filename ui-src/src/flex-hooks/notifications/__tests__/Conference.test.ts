@@ -10,9 +10,9 @@ describe('Conference notification', () => {
     failedHangupNotification(flex, manager);
     expect(notificationSpy).toHaveBeenCalled();
     expect(notificationSpy).toHaveBeenCalledWith({
-      id: 'PS_FailedHangupOnConferenceWithExternalParties',
+      id: 'FailedHangupOnConferenceWithExternalParties',
       type: 'error',
-      content: 'PSConferenceFailedHangupNotification',
+      content: 'ConferenceFailedHangupNotification',
     });
   });
 });

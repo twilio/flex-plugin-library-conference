@@ -1,4 +1,3 @@
-// import PrepareFunction from '../../../serverless/src/functions/helpers/prepare-function.private';
 import helpers from '../../test-utils/test-helper';
 
 describe('Prepare Flex Function', () => {
