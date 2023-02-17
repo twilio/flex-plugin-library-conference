@@ -47,7 +47,7 @@ jobs:
       - name: Create Pull Request for asset
         if: steps.bundle.outputs.bundled == 'true'
         run: |
-          gh pr create --base master --title "Upload bundle to assets directory" --body "Upload bundle"
+          gh pr create --base main --title "Upload bundle to assets directory" --body "Upload bundle"
         env:
           GITHUB_TOKEN: ${{ steps.get_app_token.outputs.token }}
 
