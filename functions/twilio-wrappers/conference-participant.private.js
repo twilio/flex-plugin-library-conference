@@ -14,7 +14,7 @@ const { retryHandler } = require(Runtime.getFunctions()['twilio-wrappers/retry-h
  */
 exports.addParticipant = async (parameters) => {
   const { context, taskSid, to, from } = parameters;
-  console.log('Testing')
+
   if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
   if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain taskSid string';
   if (!isString(to)) throw 'Invalid parameters object passed. Parameters must contain to string';
