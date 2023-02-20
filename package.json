@@ -1,6 +1,6 @@
 {
   "name": "flex-library-plugin-conference",
-  "version": "0.0.0",
+  "version": "0.0.0-beta",
   "private": true,
   "scripts": {
     "test": "jest",
