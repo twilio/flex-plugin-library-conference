@@ -16,4 +16,5 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps: echo "Unit Test execution not required. Passing status check"
+    steps:
+      - run: echo "Unit Test execution not required. Passing status check"
