@@ -1,4 +1,4 @@
-name: PR validator
+name: Skip Test
 
 on:
   pull_request:
