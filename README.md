@@ -48,8 +48,6 @@ Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmj
 Afterwards, install the dependencies by running `npm install`:
 
 ```bash
-cd
-
 # If you use npm
 npm install
 ```
@@ -114,9 +112,7 @@ and then
 ```
 ACCOUNT_SID=
 AUTH_TOKEN=
-TWILIO_WORKFLOW_SID=
 TWILIO_WORKSPACE_SID=
-TWILIO_NUMBER=
 ```
 
 6.  cd into ./serverless/ then run
