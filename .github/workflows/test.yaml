@@ -22,8 +22,3 @@ jobs:
           node-version: '14'
       - run: npm install
       - run: npm test
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
