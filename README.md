@@ -1,3 +1,5 @@
+NOTE: This repo is still a WIP (Work In Progress) and the codebase is not yet production ready.
+
 # Native Flex Dialpad Add-on for External Conferences
 
 ## How it works
@@ -141,8 +143,10 @@ and then
 8. Telemetry (varies from plugin to plugin) - Make use of the manager.reportPluginInteraction() to send the event data to Kibana
 9. For logging, console.log/warn/error should be effecrively used with enough contextual information (these will by default show up in debugger once enabled)
 10. Exception handling with degraded UX or information to UI along with serverless retry mechanism (for wherever applicable)
-  - 5xx should be handled with retry mechanism (max of 3 attempts)
-  - 4xx should be reported back to user saying "Please try after some time...."
+
+- 5xx should be handled with retry mechanism (max of 3 attempts)
+- 4xx should be reported back to user saying "Please try after some time...."
+
 11. E2E test suite for the entire plugin
 12. For E2E or any automated test, container components and user interactable child components must have ID attribute set.
 13. Details.md file to have content that needs to show up on PluginsLibrary frontend
