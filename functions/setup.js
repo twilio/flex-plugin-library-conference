@@ -11,7 +11,7 @@ const {
 } = require('@twilio-labs/serverless-api/dist/api/builds');
 
 async function loadPluginData(context, pluginName, replacementMap) {
-  return ['.js', '.js.map'].map((suffix) => {
+  return ['.js', '.js.LICENSE.txt', '.js.map'].map((suffix) => {
     const filename = pluginName + suffix;
     let content = Runtime.getAssets()['/' + filename].open();
     if (content) {
@@ -91,7 +91,7 @@ exports.handler = TokenValidator(async function (context, event, callback) {
       ];
 
       const assetSids = await uploadFiles(assetsToUpload, serviceSid, serverlessClient);
-      const { buildSid, environmentSid, domain_name } = await getEnvironment(serverlessClient, serviceSid, pluginName);
+      const { buildSid } = await getEnvironment(serverlessClient, serviceSid, pluginName);
       let buildAssets = [];
       let buildFunctions = [];
       let buildDependencies = [];
@@ -132,6 +132,7 @@ exports.handler = TokenValidator(async function (context, event, callback) {
     if (status === 'completed') {
       const { environmentSid, domain_name } = await getEnvironment(serverlessClient, serviceSid, pluginName);
       await activateBuild(context.IN_PROGRESS_BUILD_SID, environmentSid, serviceSid, serverlessClient);
+      const currentEnvironment = await helpers.environment.getCurrentEnvironment(context);
       await helpers.environment.setEnvironmentVariable(context, currentEnvironment, 'IN_PROGRESS_BUILD_SID', '');
       return callback(null, { status: 'completed', pluginURI: `${domain_name}${pluginBaseUrl}/bundle.js` });
     } else {
