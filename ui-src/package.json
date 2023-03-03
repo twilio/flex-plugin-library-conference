@@ -1,6 +1,6 @@
 {
-  "name": "flex-conference-plugin",
-  "version": "0.1.0",
+  "name": "flex-plugin-library-conference",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "prebuild": "rimraf build && npm run bootstrap",
