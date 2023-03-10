@@ -29,7 +29,7 @@ export function handleConferenceHangup(flex: typeof Flex, manager: Flex.Manager)
                 targetSid: participantType === 'worker' ? workerSid : callSid,
               });
             } catch (error) {
-              console.log('Conference: unable to unhold participant', error);
+              console.log('Conference: unable to unhold the participant', error);
             }
           }
         });
