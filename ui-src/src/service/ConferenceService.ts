@@ -7,6 +7,7 @@
 import ApiService from './ApiService';
 import { EncodedParams } from '../types/Params';
 import { FetchedCall, FetchedConferenceParticipant } from '../types/twilio-api';
+import { ErrorManager, FlexPluginErrorType } from '../utils/ErrorManager';
 
 export interface GetCallResponse {
   success: boolean;
@@ -41,9 +42,21 @@ class ConferenceService extends ApiService {
           console.log(`${hold ? 'Hold' : 'Unhold'} successful for participant`, participantSid);
           resolve(response.callSid);
         })
-        .catch((error) => {
-          console.error(`Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`, error);
-          reject(error);
+        .catch((e) => {
+          console.error(`Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`, e);
+          ErrorManager.createAndProcessError(
+            `Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`,
+            {
+              type: FlexPluginErrorType.serverless,
+              description:
+                e instanceof Error
+                  ? `${e.message}`
+                  : `Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`,
+              context: 'Plugin.ConferenceService',
+              wrappedError: e,
+            },
+          );
+          reject(e);
         });
     });
   };
@@ -70,9 +83,15 @@ class ConferenceService extends ApiService {
           console.log(`Participant ${participantSid} updated:\r\n`, response);
           resolve(response.callSid);
         })
-        .catch((error) => {
-          console.error(`Error updating participant ${participantSid}\r\n`, error);
-          reject(error);
+        .catch((e) => {
+          console.error(`Error updating participant ${participantSid}\r\n`, e);
+          ErrorManager.createAndProcessError(`Error updating participant ${participantSid}\r\n`, {
+            type: FlexPluginErrorType.serverless,
+            description: e instanceof Error ? `${e.message}` : `Error updating participant ${participantSid}\r\n`,
+            context: 'Plugin.ConferenceService',
+            wrappedError: e,
+          });
+          reject(e);
         });
     });
   };
@@ -95,9 +114,15 @@ class ConferenceService extends ApiService {
           console.log('Participant added:\r\n  ', response);
           resolve(response.callSid);
         })
-        .catch((error) => {
-          console.log('There is an error while adding participan', error);
-          reject(error);
+        .catch((e) => {
+          console.log('There is an error while adding participant', e);
+          ErrorManager.createAndProcessError(`Error while adding participant ${to}`, {
+            type: FlexPluginErrorType.serverless,
+            description: e instanceof Error ? `${e.message}` : `Error while adding participant ${to}`,
+            context: 'Plugin.ConferenceService',
+            wrappedError: e,
+          });
+          reject(e);
         });
     });
   };
@@ -127,9 +152,16 @@ class ConferenceService extends ApiService {
           console.log(`Participant ${participantSid} removed from conference`);
           resolve(participantSid);
         })
-        .catch((error) => {
-          console.error(`Error removing participant ${participantSid} from conference\r\n`, error);
-          reject(error);
+        .catch((e) => {
+          console.error(`Error removing participant ${participantSid} from conference\r\n`, e);
+          ErrorManager.createAndProcessError(`Error removing participant ${participantSid} from conference\r\n`, {
+            type: FlexPluginErrorType.serverless,
+            description:
+              e instanceof Error ? `${e.message}` : `Error removing participant ${participantSid} from conference\r\n`,
+            context: 'Plugin.ConferenceService',
+            wrappedError: e,
+          });
+          reject(e);
         });
     });
   };
@@ -150,9 +182,15 @@ class ConferenceService extends ApiService {
           console.log('The call properties are', resp.callProperties);
           resolve(resp.callProperties);
         })
-        .catch((error) => {
-          console.log('There is an error', error);
-          reject(error);
+        .catch((e) => {
+          console.log('There is an error', e);
+          ErrorManager.createAndProcessError(`Error fetching call properties for call ${callSid}\r\n`, {
+            type: FlexPluginErrorType.serverless,
+            description: e instanceof Error ? `${e.message}` : `Error fetching call properties for call ${callSid}\r\n`,
+            context: 'Plugin.ConferenceService',
+            wrappedError: e,
+          });
+          reject(e);
         });
     });
   };

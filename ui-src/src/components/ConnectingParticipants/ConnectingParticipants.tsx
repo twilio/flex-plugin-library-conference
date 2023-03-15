@@ -6,6 +6,7 @@ import { AppState, reduxNamespace } from '../../flex-hooks/states/ConferenceSlic
 import { removeConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
 import ConferenceService from '../../service/ConferenceService';
 import { FetchedCall } from '../../types/twilio-api';
+import { ErrorManager, FlexPluginErrorType } from '../../utils/ErrorManager';
 
 export interface OwnProps {
   conference?: ConferenceState;
@@ -43,8 +44,14 @@ const ConnectingParticipants = (props: OwnProps) => {
               dispatch(removeConnectingParticipant(participant.callSid));
             }
           })
-          .catch((error) => {
-            console.log('ConnectingParticipant unable to check call status', error);
+          .catch((e) => {
+            console.log('ConnectingParticipant unable to check call status', e);
+            ErrorManager.createAndProcessError(`Unable to check call status`, {
+              type: FlexPluginErrorType.serverless,
+              description: e instanceof Error ? `${e.message}` : `Unable to check call status`,
+              context: 'Plugin.ConnectingParticipant',
+              wrappedError: e,
+            });
           });
       });
   }, [clock]);

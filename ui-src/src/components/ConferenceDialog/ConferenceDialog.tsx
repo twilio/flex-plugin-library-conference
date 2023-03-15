@@ -11,6 +11,7 @@ import { Input } from '@twilio-paste/core/input';
 import { Label } from '@twilio-paste/core/label';
 import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading } from '@twilio-paste/core/modal';
 import { addConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
+import { ErrorManager, FlexPluginErrorType } from '../../utils/ErrorManager';
 
 export interface OwnProps {
   task?: ITask;
@@ -97,8 +98,14 @@ const ConferenceDialog = (props: OwnProps) => {
           phoneNumber: conferenceTo,
         }),
       );
-    } catch (error) {
-      console.error('Error adding conference participant:', error);
+    } catch (e) {
+      console.error('Error adding conference participant:', e);
+      ErrorManager.createAndProcessError('Could not add participant to conference', {
+        type: FlexPluginErrorType.serverless,
+        description: e instanceof Error ? `${e.message}` : 'Could not add participant to conference',
+        context: 'Plugin.ConferenceDialog',
+        wrappedError: e,
+      });
     }
 
     setConferenceTo('');
