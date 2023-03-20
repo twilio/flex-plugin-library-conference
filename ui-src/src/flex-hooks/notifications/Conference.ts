@@ -11,14 +11,6 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   failedHangupNotification(flex, manager);
 };
 
-function errorNotification(flex: typeof Flex, manager: Flex.Manager) {
-  flex.Notifications.registerNotification({
-    id: ConferenceNotification.ErrorConference,
-    type: Flex.NotificationType.error,
-    content: StringTemplates.ErrorConference,
-  });
-}
-
 function failedHangupNotification(flex: typeof Flex, manager: Flex.Manager) {
   flex.Notifications.registerNotification({
     id: ConferenceNotification.FailedHangupNotification,
