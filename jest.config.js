@@ -22,6 +22,8 @@ module.exports = {
     '/utils',
     '/build',
     'assets',
+    './functions/setup.js',
+    '/redux',
   ],
   coverageReporters: ['json', 'lcov', 'text', 'clover', 'cobertura'],
   testResultsProcessor: 'jest-junit',

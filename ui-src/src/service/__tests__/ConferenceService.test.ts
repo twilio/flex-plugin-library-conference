@@ -2,6 +2,7 @@ import ConferenceService from '../ConferenceService';
 import * as Flex from '@twilio/flex-ui';
 import { setServiceConfiguration } from '../../../test-utils/flex-service-configuration';
 import fetch from 'jest-fetch-mock';
+import { ErrorManager } from '../../utils/ErrorManager';
 
 describe('setEndConferenceOnExit', () => {
   beforeAll(() => {
@@ -56,6 +57,12 @@ describe('addParticipant', () => {
       err = error;
     }
     expect(err).toEqual('Mock Error string');
+  });
+  it('throws error using ErrorManager', async () => {
+    const errorManagerSpy = jest.spyOn(ErrorManager, 'createAndProcessError');
+    await ConferenceService.addParticipant('TSxxxxxx', '+91xxxxxx', '+92xxxxxx').catch((e) => {
+      expect(errorManagerSpy).toHaveBeenCalled();
+    });
   });
 });
 
