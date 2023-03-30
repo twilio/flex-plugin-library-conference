@@ -10,6 +10,9 @@ import { Button } from '@twilio-paste/core/button';
 import { Input } from '@twilio-paste/core/input';
 import { Label } from '@twilio-paste/core/label';
 import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading } from '@twilio-paste/core/modal';
+import { PopoverContainer, Popover, PopoverButton } from '@twilio-paste/core/popover';
+import { InformationIcon } from '@twilio-paste/icons/cjs/InformationIcon';
+import { Text } from '@twilio-paste/core/text';
 import { addConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
 import { ErrorManager, FlexPluginErrorType } from '../../utils/ErrorManager';
 
@@ -128,7 +131,19 @@ const ConferenceDialog = (props: OwnProps) => {
       </ModalHeader>
       <ModalBody>
         <Box as="form">
-          <Label htmlFor={inputID}>Phone Number</Label>
+          <Box display="flex" alignItems="center" marginBottom="space40">
+            <Label htmlFor={inputID} marginBottom="space0">Phone Number</Label>
+            <PopoverContainer baseId={`hint-popover`} placement="right">
+              <PopoverButton variant="secondary_icon" size="icon_small">
+                <InformationIcon decorative={false} title="Help link" color="colorTextLink" />
+              </PopoverButton>
+              <Popover aria-label="Popover" element="plugin-hint-popover">
+                <Text as="span" marginRight="space20">
+                  Phone number with country code: +1xxxxxxxxxx
+                </Text>
+              </Popover>
+            </PopoverContainer>
+          </Box>
           <Input
             id={inputID}
             value={conferenceTo}

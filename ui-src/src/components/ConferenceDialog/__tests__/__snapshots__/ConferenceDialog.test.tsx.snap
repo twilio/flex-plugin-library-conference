@@ -6,7 +6,11 @@ Object {
   "baseElement": <body>
     <div
       aria-hidden="true"
-    />
+    >
+      <div
+        class="css-ql39e"
+      />
+    </div>
     <reach-portal>
       <div
         data-focus-guard="true"
@@ -18,7 +22,7 @@ Object {
       >
         <div>
           <div
-            class="css-159lja1"
+            class="css-c1xjeb"
             data-paste-element="MODAL_OVERLAY"
             data-reach-dialog-overlay=""
             style="opacity: 0;"
@@ -27,28 +31,28 @@ Object {
             <div
               aria-labelledby="1"
               aria-modal="true"
-              class="css-trckgm"
+              class="css-gyczrd"
               data-paste-element="MODAL"
               data-reach-dialog-content=""
               data-testid="modal-header"
               role="dialog"
-              style="opacity: 0; transform: scale(0.675);"
+              style="opacity: 1; transform: scale(1);"
               tabindex="-1"
             >
               <div
-                class="css-1b9e17t"
+                class="css-lb5g8s"
                 data-paste-element="MODAL_HEADER"
               >
                 <div
-                  class="css-1ibkied"
+                  class="css-c7culv"
                   data-paste-element="FLEX"
                 >
                   <div
-                    class="css-1072z4j"
+                    class="css-7zgbnq"
                     data-paste-element="FLEX"
                   >
                     <h3
-                      class="css-n8ur01"
+                      class="css-1a3jcvz"
                       data-paste-element="MODAL_HEADING"
                       id="1"
                     >
@@ -57,16 +61,16 @@ Object {
                   </div>
                   <button
                     aria-busy="false"
-                    class="css-48drkk"
+                    class="css-1xcgclj"
                     data-paste-element="MODAL_HEADER_CLOSE_BUTTON"
                     type="button"
                   >
                     <span
-                      class="css-z6jp9v"
+                      class="css-cfzbzn"
                       data-paste-element="BOX"
                     >
                       <span
-                        class="css-yrazta"
+                        class="css-zhc3mm"
                         data-paste-element="MODAL_HEADER_CLOSE_ICON"
                       >
                         <svg
@@ -86,7 +90,7 @@ Object {
                         </svg>
                       </span>
                       <span
-                        class="css-1t35qh6"
+                        class="css-1cbdvo6"
                         data-paste-element="BOX"
                       >
                         Close modal
@@ -96,36 +100,81 @@ Object {
                 </div>
               </div>
               <div
-                class="css-137sttb"
+                class="css-4ilz29"
                 data-paste-element="MODAL_BODY"
               >
                 <form
                   class="css-roynbj"
                   data-paste-element="BOX"
                 >
-                  <label
-                    class="css-rwo46e"
-                    data-paste-element="LABEL"
-                    for="2"
+                  <div
+                    class="css-dultti"
+                    data-paste-element="BOX"
                   >
-                    <span
-                      class="css-1sekzvp"
-                      data-paste-element="MEDIA_OBJECT"
+                    <label
+                      class="css-ursmaf"
+                      data-paste-element="LABEL"
+                      for="2"
                     >
                       <span
-                        class="css-1cywlpt"
-                        data-paste-element="MEDIA_BODY"
+                        class="css-1sekzvp"
+                        data-paste-element="MEDIA_OBJECT"
                       >
-                        Phone Number
+                        <span
+                          class="css-1i39mnm"
+                          data-paste-element="MEDIA_BODY"
+                        >
+                          Phone Number
+                        </span>
                       </span>
-                    </span>
-                  </label>
+                    </label>
+                    <button
+                      aria-busy="false"
+                      aria-controls="hint-popover"
+                      aria-expanded="false"
+                      aria-haspopup="dialog"
+                      class="css-1dl24fb"
+                      data-paste-element="POPOVER_BUTTON"
+                      type="button"
+                    >
+                      <span
+                        class="css-cfzbzn"
+                        data-paste-element="BOX"
+                      >
+                        <span
+                          class="css-ogcwvo"
+                          data-paste-element="ICON"
+                        >
+                          <svg
+                            aria-hidden="false"
+                            aria-labelledby="InformationIcon-4"
+                            height="100%"
+                            role="img"
+                            viewBox="0 0 20 20"
+                            width="100%"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <title
+                              id="InformationIcon-4"
+                            >
+                              Help link
+                            </title>
+                            <path
+                              d="M10 2a8 8 0 110 16 8 8 0 010-16zm0 1.25a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM10 9a1 1 0 011 1v3a1 1 0 01-2 0v-3a1 1 0 011-1zm0-3a1 1 0 110 2 1 1 0 010-2z"
+                              fill="currentColor"
+                              fill-rule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                      </span>
+                    </button>
+                  </div>
                   <div
-                    class="css-nrrnrg"
+                    class="css-1lexgt8"
                     data-paste-element="INPUT"
                   >
                     <input
-                      class="css-9se8rz"
+                      class="css-1gc43fm"
                       data-paste-element="INPUT_ELEMENT"
                       data-testid="phoneNumberInput"
                       id="2"
@@ -136,7 +185,7 @@ Object {
                 </form>
               </div>
               <div
-                class="css-1aspgdz"
+                class="css-114vvno"
                 data-paste-element="MODAL_FOOTER"
               >
                 <div
@@ -144,18 +193,18 @@ Object {
                   data-paste-element="MODAL_FOOTER_ACTIONS"
                 >
                   <div
-                    class="css-10brdie"
+                    class="css-1tu7krc"
                     data-paste-element="MODAL_FOOTER_ACTIONS_ITEM"
                   >
                     <button
                       aria-busy="false"
-                      class="css-kzhkm0"
+                      class="css-1z0947j"
                       data-paste-element="BUTTON"
                       title="Cancel"
                       type="button"
                     >
                       <span
-                        class="css-z6jp9v"
+                        class="css-cfzbzn"
                         data-paste-element="BOX"
                       >
                         Cancel
@@ -168,13 +217,13 @@ Object {
                   >
                     <button
                       aria-busy="false"
-                      class="css-175kaqp"
+                      class="css-ozroa7"
                       data-paste-element="BUTTON"
                       title="Dial"
                       type="button"
                     >
                       <span
-                        class="css-z6jp9v"
+                        class="css-cfzbzn"
                         data-paste-element="BOX"
                       >
                         Dial
@@ -193,10 +242,109 @@ Object {
         tabindex="0"
       />
     </reach-portal>
+    <div
+      aria-hidden="true"
+      class="__reakit-portal"
+    >
+      <div
+        aria-label="Popover"
+        aria-modal="true"
+        class="css-b7xdpu"
+        data-dialog="true"
+        data-paste-element="BOX"
+        hidden=""
+        id="hint-popover"
+        role="dialog"
+        style="display: none; position: fixed; left: 100%; top: 100%;"
+        tabindex="-1"
+      >
+        <div
+          class="css-ql39e"
+        >
+          <div
+            style="font-size: 1.5rem; width: 1em; height: 1em; pointer-events: none; right: 100%;"
+          >
+            <svg
+              style="transform: rotateZ(-90deg);"
+              viewBox="0 0 30 30"
+            >
+              <path
+                d="M23.7,27.1L17,19.9C16.5,19.3,15.8,19,15,19s-1.6,0.3-2.1,0.9l-6.6,7.2C5.3,28.1,3.4,29,2,29h26
+        C26.7,29,24.6,28.1,23.7,27.1z"
+                fill="rgb(255, 255, 255)"
+                stroke="rgb(225, 227, 234)"
+              />
+              <path
+                d="M23,27.8c1.1,1.2,3.4,2.2,5,2.2h2H0h2c1.7,0,3.9-1,5-2.2l6.6-7.2c0.7-0.8,2-0.8,2.7,0L23,27.8L23,27.8z"
+                fill="rgb(255, 255, 255)"
+              />
+            </svg>
+          </div>
+          <div
+            class="css-12eislv"
+            data-paste-element="plugin-hint-popover"
+          >
+            <div
+              class="css-4c5ydt"
+              data-paste-element="BOX"
+            >
+              <button
+                aria-busy="false"
+                class="css-1xcgclj"
+                data-paste-element="plugin-hint-popover_CLOSE_BUTTON"
+                type="button"
+              >
+                <span
+                  class="css-cfzbzn"
+                  data-paste-element="BOX"
+                >
+                  <span
+                    class="css-oxge8y"
+                    data-paste-element="plugin-hint-popover_CLOSE_ICON"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      aria-labelledby="CloseIcon-5"
+                      height="100%"
+                      role="img"
+                      viewBox="0 0 20 20"
+                      width="100%"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M15.16 13.514L11.645 10l3.515-3.514a1.165 1.165 0 00-1.646-1.646L10 8.355 6.486 4.84A1.165 1.165 0 004.84 6.486L8.355 10 4.84 13.514a1.165 1.165 0 001.646 1.646L10 11.645l3.514 3.515a1.165 1.165 0 001.646-1.646z"
+                        fill="currentColor"
+                        fill-rule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <span
+                    class="css-1cbdvo6"
+                    data-paste-element="BOX"
+                  >
+                    Close popover
+                  </span>
+                </span>
+              </button>
+            </div>
+            <span
+              class="css-ca5r9w"
+              data-paste-element="TEXT"
+            >
+              Phone number with country code: +1xxxxxxxxxx
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>,
   "container": <div
     aria-hidden="true"
-  />,
+  >
+    <div
+      class="css-ql39e"
+    />
+  </div>,
   "debug": [Function],
   "findAllByAltText": [Function],
   "findAllByDisplayValue": [Function],

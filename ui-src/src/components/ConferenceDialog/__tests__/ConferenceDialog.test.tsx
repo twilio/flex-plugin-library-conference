@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
+import { render } from '../../../../../test-utils/renderer'
 import '@testing-library/jest-dom';
 import { ITask, Actions } from '@twilio/flex-ui';
 import ConferenceDialog from '../ConferenceDialog';
