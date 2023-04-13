@@ -1,8 +1,15 @@
 ## Details
 
-### Overview
+### Prerequisites
+Flex Dialpad should be enabled. in voice configuration for this plugin to work. Please refer to the screenshot below. Visit [Twilio Console](https://console.stage.twilio.com/us1/develop/flex/manage/voice) to set up the voice configuration below.
 
-This plugin uses Twilio Functions and WorkerClient's createTask method to create conferences and TaskRouter tasks for orchestration in both agent-to-agent calls and external transfers features.
-When in a call, a "plus" icon is added to the Call Canvas where you can add a external number to the call. This action executes a Twilio Function that uses the Twilio API to make a call and add this call to the current conference. In the Flex UI side, the participant is added manually and both hold/unhold and hangup buttons are available.
+![Dialpad configuration](https://raw.githubusercontent.com/twilio/flex-plugin-library-conference/main/screenshots/dialpad.png)
 
-An invisible component is mounted to track participant state and set endConferenceOnExit appropriately to allow for external transfer functionality -- the agent can leave the call while the remaining conference participants continue to communicate. If there are two parties remaining, the call will automatically end when one of them hangs up.
+### How it works
+Plugin is ready to use once it is installed and the browser window is refreshed.
+- While in an active call, you will see a "+" button added to the call canvas.
+- Clicking the "+" button pops a dialog where you can enter an external number (with country code e.g. +16501234567) to add to the call.
+- Hold, un-hold and hangup buttons are available for the added number.
+
+### Installation
+No input required.
