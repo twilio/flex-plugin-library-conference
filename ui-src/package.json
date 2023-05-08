@@ -1,6 +1,7 @@
 {
   "name": "flex-plugin-library-conference",
   "version": "1.0.0",
+  "id": "plibo-dialpad-addon-conference",
   "private": true,
   "scripts": {
     "prebuild": "rimraf build && npm run bootstrap",
@@ -41,7 +42,7 @@
     "@babel/preset-typescript": "^7.12.1",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.5",
-    "@twilio/flex-ui": "2.0.2",
+    "@twilio/flex-ui": "2.1.1",
     "@types/jest": "^26.0.20",
     "@types/react-redux": "^7.1.1",
     "@emotion/styled": "11.10.5"
