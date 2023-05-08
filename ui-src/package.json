@@ -1,7 +1,7 @@
 {
   "name": "flex-plugin-library-conference",
   "version": "1.0.0",
-  "pluginsLibraryUniqueName": "plibo-dialpad-addon-conference",
+  "id": "plibo-dialpad-addon-conference",
   "private": true,
   "scripts": {
     "prebuild": "rimraf build && npm run bootstrap",

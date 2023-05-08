@@ -48,7 +48,7 @@ class ErrorManagerImpl {
     try {
       console.log(`Conference Plugin: ${error}\nType: ${error.content.type}\nContext:${error.content.context}`);
       const pluginError = new Flex.FlexError(error.message, {
-        plugin: { name: packageJSON.pluginsLibraryUniqueName, version: packageJSON.version },
+        plugin: { name: packageJSON.id, version: packageJSON.version },
         description: error.content.description,
       });
       if (flexManager?.reportErrorEvent) {
