@@ -17,7 +17,7 @@ export enum FlexErrorSeverity {
 
 export type FlexPluginErrorContents = {
   type?: FlexPluginErrorType | string;
-  wrappedError?: Error | string | unknown;
+  wrappedError?: unknown;
   context?: string;
   description?: string;
   severity?: FlexErrorSeverity;
@@ -35,8 +35,8 @@ export class FlexPluginError extends Error {
     super(message);
     this.content = {
       ...content,
-      type: content.type || 'ConferencePlugin',
-      severity: content.severity || FlexErrorSeverity.normal,
+      type: content.type ?? 'ConferencePlugin',
+      severity: content.severity ?? FlexErrorSeverity.normal,
     };
     this.time = new Date();
     Object.setPrototypeOf(this, FlexPluginError.prototype);
