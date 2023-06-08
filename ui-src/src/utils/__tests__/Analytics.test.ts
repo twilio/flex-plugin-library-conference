@@ -10,7 +10,7 @@ describe('Analytics', () => {
     accountSid: '',
     flexUiVersion: '2.1.1',
     originalPluginName: 'plibo-dialpad-addon-conference',
-    plugin: 'flex-plugin-library-conference',
+    plugin: 'plibo-dialpad-addon-conference',
     pluginVersion: '1.0.0',
     product: 'Flex',
     workerSid: '',
