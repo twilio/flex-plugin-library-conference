@@ -1,5 +1,4 @@
 const helpers = require('@twilio-labs/runtime-helpers');
-const { listEnvironments } = require('@twilio-labs/serverless-api/dist/api/environments');
 const { getOrCreateAssetResources, uploadAsset } = require('@twilio-labs/serverless-api/dist/api/assets');
 const { TwilioServerlessApiClient } = require('@twilio-labs/serverless-api');
 const {
@@ -9,7 +8,7 @@ const {
   activateBuild,
 } = require('@twilio-labs/serverless-api/dist/api/builds');
 
-async function loadPluginData(context, pluginName, replacementMap) {
+async function loadPluginData(pluginName, replacementMap) {
   return ['.js', '.js.LICENSE.txt', '.js.map'].map((suffix) => {
     const filename = pluginName + suffix;
     let content = Runtime.getAssets()['/' + filename].open();
@@ -58,7 +57,7 @@ exports.handler = async function (context, event, callback) {
   const { buildSid, sid: environmentSid, domainName } = currentEnvironment;
   try {
     if (!context.IN_PROGRESS_BUILD_SID) {
-      const [bundleData, sourceMapData] = await loadPluginData(context, pluginName, replacementMap);
+      const [bundleData, sourceMapData] = await loadPluginData(pluginName, replacementMap);
       const assetsToUpload = [
         {
           access: 'protected',
