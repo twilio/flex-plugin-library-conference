@@ -5,7 +5,6 @@
   "private": true,
   "scripts": {
     "prebuild": "rimraf build && npm run bootstrap",
-    "postinstall": "flex-plugin pre-script-check",
     "prestart": "npm run bootstrap",
     "test": "jest"
   },
