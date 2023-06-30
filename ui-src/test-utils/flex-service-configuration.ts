@@ -9,7 +9,6 @@ import { mergeWith, unset } from 'lodash';
 interface ServiceConfiguration extends Flex.ServiceConfiguration {
   ui_attributes: UIAttributes;
 }
-
 // Create an interface so we can set ui_attributes with our custom data and intellisense
 // Make ui_attributes Partial for ease of testing code (only provide what you need in test)
 interface ServiceConfigurationUpdate extends Flex.ServiceConfiguration {
