@@ -1,6 +1,4 @@
 import ConferenceService from '../ConferenceService';
-import * as Flex from '@twilio/flex-ui';
-import { setServiceConfiguration } from '../../../test-utils/flex-service-configuration';
 import fetch from 'jest-fetch-mock';
 import { ErrorManager } from '../../utils/ErrorManager';
 

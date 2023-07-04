@@ -1,8 +1,8 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
-import { render } from '../../../../../test-utils/renderer'
+import { render } from '../../../../test-utils/renderer'
 import '@testing-library/jest-dom';
-import { ITask, Actions } from '@twilio/flex-ui';
+import { Actions } from '@twilio/flex-ui';
 import ConferenceDialog from '../ConferenceDialog';
 import ConferenceService from '../../../service/ConferenceService';
 
@@ -114,7 +114,7 @@ describe('Conference Dialog', () => {
         },
       },
     };
-    const { getByTitle, getByTestId } = render(<ConferenceDialog task={mockTask} />);
+    const { getByTestId } = render(<ConferenceDialog task={mockTask} />);
     const phoneNumber = getByTestId('phoneNumberInput');
     if (phoneNumber) {
       fireEvent.change(phoneNumber, {
