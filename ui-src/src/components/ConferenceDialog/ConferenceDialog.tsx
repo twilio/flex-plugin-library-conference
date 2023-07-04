@@ -103,7 +103,7 @@ const ConferenceDialog = (props: OwnProps) => {
         }),
       );
       Analytics.track(Event.CONFERENCE_NUMBER_DIALED, {
-        conferenceNumber: conferenceTo,
+        conferenceSid: mainConferenceSid,
       });
     } catch (e) {
       console.error('Error adding conference participant:', e);
