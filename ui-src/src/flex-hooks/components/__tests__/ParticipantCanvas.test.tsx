@@ -3,7 +3,7 @@ import * as Flex from '@twilio/flex-ui';
 import { addConferenceToParticipantCanvas } from '../ParticipantCanvas';
 
 describe('CallCanvas', () => {
-  let flex: typeof Flex = Flex;
+  const flex: typeof Flex = Flex;
   const addContentSpy = jest.spyOn(Flex.ParticipantCanvas.Content, 'add');
   const removeContentSpy = jest.spyOn(Flex.ParticipantCanvas.Content, 'remove');
   const addListItemSpy = jest.spyOn(Flex.ParticipantCanvas.ListItem.Content, 'add');

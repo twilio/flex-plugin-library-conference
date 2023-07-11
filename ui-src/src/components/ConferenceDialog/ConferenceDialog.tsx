@@ -15,7 +15,7 @@ import { InformationIcon } from '@twilio-paste/icons/cjs/InformationIcon';
 import { Text } from '@twilio-paste/core/text';
 import { addConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
 import { ErrorManager, FlexPluginErrorType } from '../../utils/ErrorManager';
-import Analytics, {Event} from '../../utils/Analytics';
+import Analytics, { Event } from '../../utils/Analytics';
 
 export interface OwnProps {
   task?: ITask;
@@ -136,7 +136,9 @@ const ConferenceDialog = (props: OwnProps) => {
       <ModalBody>
         <Box as="form">
           <Box display="flex" alignItems="center" marginBottom="space40">
-            <Label htmlFor={inputID} marginBottom="space0">Phone Number</Label>
+            <Label htmlFor={inputID} marginBottom="space0">
+              Phone Number
+            </Label>
             <PopoverContainer baseId={`hint-popover`} placement="right">
               <PopoverButton variant="secondary_icon" size="icon_small">
                 <InformationIcon decorative={false} title="Help link" color="colorTextLink" />

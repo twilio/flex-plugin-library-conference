@@ -100,7 +100,7 @@ const ParticipantActionsButtons = (props: OwnProps) => {
 
     if (!participant) return;
     const { callSid, workerSid } = participant;
-    let participantType = participant.participantType;
+    const participantType = participant.participantType;
 
     Actions.invokeAction(participant.onHold ? 'UnholdParticipant' : 'HoldParticipant', {
       participantType,

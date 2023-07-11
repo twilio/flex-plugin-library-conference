@@ -3,8 +3,8 @@ import { handleConferenceHangup } from '../HangupCall';
 import ConferenceService from '../../../service/ConferenceService';
 
 describe('HoldParticipant Action', () => {
-  let flex: typeof Flex = Flex;
-  let manager: Flex.Manager = Flex.Manager.getInstance();
+  const flex: typeof Flex = Flex;
+  const manager: Flex.Manager = Flex.Manager.getInstance();
 
   beforeEach(() => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
