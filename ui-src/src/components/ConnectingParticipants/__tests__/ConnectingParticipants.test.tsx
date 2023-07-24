@@ -42,8 +42,8 @@ describe('Connecting Participant', () => {
     jest.spyOn(console, 'warn').mockImplementation(() => {});
     jest.spyOn(console, 'error').mockImplementation(() => {});
   });
-  let flex: typeof Flex = Flex;
-  let manager: Flex.Manager = Flex.Manager.getInstance();
+  const flex: typeof Flex = Flex;
+  const manager: Flex.Manager = Flex.Manager.getInstance();
   const tsk = { conference: { conferenceSid: '1672673' } } as unknown as Flex.ITask;
   const conf = { source: { participants: [{ callSid: '167264' }] } } as unknown as ConferenceState;
   it('should render correct snapshot', () => {

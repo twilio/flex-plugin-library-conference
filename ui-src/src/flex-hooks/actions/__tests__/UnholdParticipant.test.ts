@@ -9,8 +9,8 @@ jest.mock('../../../service/ConferenceService', () => {
 });
 
 describe('UnholdParticipant Action', () => {
-  let flex: typeof Flex = Flex;
-  let manager: Flex.Manager = Flex.Manager.getInstance();
+  const flex: typeof Flex = Flex;
+  const manager: Flex.Manager = Flex.Manager.getInstance();
   const actionSpy = jest.spyOn(ConferenceService, 'unholdParticipant');
 
   beforeEach(() => {
