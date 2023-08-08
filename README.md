@@ -45,7 +45,7 @@ This repository is a Flex plugin with some other assets. The following describin
 
 Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmjs.com) installed.
 
-Afterwards, install the dependencies by running `npm install`:
+Afterwards, install the dependencies by running `npm install` at both 'root` and `ui-src` directory of the project:
 
 ```bash
 cd
@@ -72,7 +72,25 @@ When you make changes to your code, the browser window will be automatically ref
 
 Once you are happy with your plugin, you have to deploy then release the plugin for it to take affect on Twilio hosted Flex.
 
-Run the following command to start the deployment:
+Rename `.env.example` at the root of the project to `.env` , And fill as shown on example below:
+TWILIO_FLEX_WORKSPACE_SID=<YOUR_FLEX_WORKSPACE_SID>
+TWILIO_SERVERLESS_API_CONCURRENCY=10
+TWILIO_SERVICE_RETRY_LIMIT=5
+TWILIO_SERVICE_MIN_BACKOFF=100
+TWILIO_SERVICE_MAX_BACKOFF=300
+
+Once the .env values are set, Let's do the serverless deployment with below command at `root` of your project:
+
+```bash
+twilio serverless:deploy
+```
+Rename `.env.example inside `ui-src` folder to `.env`
+If the serverless deployment was successful, you must see the Domain url which ends with `.twil.io`
+Copy the entire domain url and add that inside `.env` file of `ui-src` folder
+
+FLEX_APP_SERVERLESS_FUNCTONS_DOMAIN=<DOMAIN_URL>
+
+Run the following command on `ui-src` folder to start the deployment:
 
 ```bash
 twilio flex:plugins:deploy --major --changelog "Notes for this version" --description "Functionality of the plugin"
