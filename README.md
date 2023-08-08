@@ -72,7 +72,7 @@ When you make changes to your code, the browser window will be automatically ref
 
 Once you are happy with your plugin, you have to deploy then release the plugin for it to take affect on Twilio hosted Flex.
 
-Rename `.env.example` at the root of the project to `.env` , And fill as shown on example below:
+Rename `.env.example` at root of the project to `.env` , And fill the values as shown below:
 
 ```
 TWILIO_FLEX_WORKSPACE_SID=<YOUR_FLEX_WORKSPACE_SID>
@@ -82,16 +82,18 @@ TWILIO_SERVICE_MIN_BACKOFF=100
 TWILIO_SERVICE_MAX_BACKOFF=300
 ```
 
-Once the .env values are set, Let's do the serverless deployment with below command at `root` of your project:
+Once the .env values are set, Start serverless deployment with below command at `root` of your project:
 
 ```bash
 twilio serverless:deploy
 ```
-Rename `.env.example` inside `ui-src` folder to `.env`
-If the serverless deployment was successful, you must see the Domain url which ends with `.twil.io`
-Copy the entire domain url and add that inside `.env` file of `ui-src` folder
+Rename `.env.example` inside `ui-src` folder to `.env`.
+If the serverless deployment was successful, you must see the Domain url which ends with `.twil.io`.
+Copy the entire domain url and add that inside `.env` file of `ui-src` folder.
 
+```
 FLEX_APP_SERVERLESS_FUNCTONS_DOMAIN=<DOMAIN_URL>
+```
 
 Run the following command on `ui-src` folder to start the deployment:
 
