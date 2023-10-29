@@ -18,7 +18,6 @@ const ConnectingParticipants = (props: OwnProps) => {
 
   const dispatch = useDispatch();
   const { connectingParticipants } = useSelector((state: AppState) => state[reduxNamespace]);
-
   useEffect(() => {
     // set up interval for cleaning up disconnected participants
     const interval = setInterval(() => {

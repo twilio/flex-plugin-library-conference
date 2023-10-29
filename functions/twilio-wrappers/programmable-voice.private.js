@@ -1,6 +1,4 @@
-const { isString, isObject } = require('lodash');
-
-const retryHandler = require(Runtime.getFunctions()['twilio-wrappers/retry-handler'].path).retryHandler;
+import { ProgrammableVoiceUtils } from '@twilio/flex-plugins-library-utils';
 
 /**
  * @param {object} parameters the parameters for the function
@@ -13,16 +11,17 @@ const retryHandler = require(Runtime.getFunctions()['twilio-wrappers/retry-handl
 exports.fetchProperties = async (parameters) => {
   const { context, callSid } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(callSid)) throw 'Invalid parameters object passed. Parameters must contain callSid string';
+  const config = {
+    attempts: 3,
+    callSid,
+  };
 
+  const client = context.getTwilioClient();
+  const voiceClient = new ProgrammableVoiceUtils(client, config);
   try {
-    const client = context.getTwilioClient();
-
-    const callProperties = await client.calls(callSid).fetch();
-
-    return { success: true, callProperties, status: 200 };
+    const call = await voiceClient.fetchProperties(config);
+    return { success: true, callProperties: call.callProperties, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return { success: false, status: error.status, message: error.message };
   }
 };

@@ -4,41 +4,39 @@ jest.mock('../../../functions/helpers/prepare-function.private.js', () => ({
   __esModule: true,
   prepareFlexFunction: (_, fn) => fn,
 }));
+jest.mock('@twilio/flex-plugins-library-utils', () => ({
+  __esModule: true,
+  ConferenceUtils: jest.fn(),
+}));
+
+import { ConferenceUtils } from '@twilio/flex-plugins-library-utils';
 
 const mockCallSid = 'CSxxxxx';
 describe('Remove Participant', () => {
-  const getRemoveParticipantMockTwilioClient = function (removeParticipant) {
-    const mockConferenceService = {
-      participants: (_partSid) => ({
-        remove: removeParticipant,
-      }),
-    };
-    return {
-      conferences: (_taskSid) => mockConferenceService,
-    };
-  };
-  const removeParticipantMock = jest.fn(() => Promise.resolve());
-
   beforeAll(() => {
     helpers.setup();
     global.Runtime._addFunction('helpers/prepare-function', './functions/helpers/prepare-function.private.js');
-    global.Runtime._addFunction('helpers/parameter-validator', './functions/helpers/parameter-validator.private.js');
     global.Runtime._addFunction(
       'twilio-wrappers/conference-participant',
       './functions/twilio-wrappers/conference-participant.private.js',
     );
-    global.Runtime._addFunction(
-      'twilio-wrappers/retry-handler',
-      './functions/twilio-wrappers/retry-handler.private.js',
-    );
   });
 
   it('removeParticipant is called successfully ', async () => {
+    ConferenceUtils.mockImplementation((value) => {
+      return {
+        removeParticipant: jest.fn(() =>
+          Promise.resolve({
+            success: true,
+            status: 200,
+          }),
+        ),
+      };
+    });
     const RemoveParticipant = require('../../../functions/conference/remove-participant');
     const handlerFn = RemoveParticipant.handler;
     const mockContext = {
-      PATH: 'mockPath',
-      getTwilioClient: () => getRemoveParticipantMockTwilioClient(removeParticipantMock),
+      getTwilioClient: () => () => jest.fn(),
     };
     const mockEvent = {
       conference: 'mockTaskSid',

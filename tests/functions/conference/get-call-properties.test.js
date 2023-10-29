@@ -4,34 +4,35 @@ jest.mock('../../../functions/helpers/prepare-function.private.js', () => ({
   __esModule: true,
   prepareFlexFunction: (_, fn) => fn,
 }));
+jest.mock('@twilio/flex-plugins-library-utils', () => ({
+  __esModule: true,
+  ProgrammableVoiceUtils: jest.fn(),
+}));
+
+import { ProgrammableVoiceUtils } from '@twilio/flex-plugins-library-utils';
 
 describe('Get Call Properties', () => {
-  const getVoiceMockTwilioClient = function (fetchProperties) {
-    const mockVoiceService = {
-      fetch: fetchProperties,
-    };
-    return {
-      calls: (_callSid) => mockVoiceService,
-    };
-  };
-
-  const fetchProperties = jest.fn(() => Promise.resolve());
-
   beforeAll(() => {
     helpers.setup();
     global.Runtime._addFunction('helpers/prepare-function', './functions/helpers/prepare-function.private.js');
-    global.Runtime._addFunction('helpers/parameter-validator', './functions/helpers/parameter-validator.private.js');
     global.Runtime._addFunction(
       'twilio-wrappers/programmable-voice',
       './functions/twilio-wrappers/programmable-voice.private.js',
     );
-    global.Runtime._addFunction(
-      'twilio-wrappers/retry-handler',
-      './functions/twilio-wrappers/retry-handler.private.js',
-    );
   });
 
   it('GetCallProperties is called successfully ', async () => {
+    ProgrammableVoiceUtils.mockImplementation((value) => {
+      return {
+        fetchProperties: jest.fn(() =>
+          Promise.resolve({
+            status: 200,
+            callProperties: {},
+            success: true,
+          }),
+        ),
+      };
+    });
     const GetCallProperties = require('../../../functions/conference/get-call-properties');
     const handlerFn = GetCallProperties.handler;
     const requiredParameters = [
@@ -40,8 +41,7 @@ describe('Get Call Properties', () => {
       { key: 'from', purpose: 'caller ID to use when adding to the conference' },
     ];
     const mockContext = {
-      PATH: 'mockPath',
-      getTwilioClient: () => getVoiceMockTwilioClient(fetchProperties),
+      getTwilioClient: () => () => jest.fn(),
     };
     const mockEvent = {
       callSid: 'CSxxxxx',

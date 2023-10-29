@@ -1,4 +1,3 @@
-import { VERSION } from '@twilio/flex-ui';
 import packageJSON from '../../package.json';
 import FlexTelemetry from '@twilio/flex-ui-telemetry';
 
