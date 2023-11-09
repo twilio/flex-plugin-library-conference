@@ -7,12 +7,7 @@ export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex
     flex.Actions.addListener('beforeKickParticipant', async (payload, abortFunction) => {
       const { participantType } = payload;
 
-      if (
-        participantType &&
-        participantType !== 'transfer' &&
-        participantType !== 'external' &&
-        participantType !== 'worker'
-      ) {
+      if (participantType && participantType !== 'transfer' && participantType !== 'worker') {
         abortFunction();
 
         const { task, targetSid } = payload;
