@@ -15,7 +15,7 @@ import { InformationIcon } from '@twilio-paste/icons/cjs/InformationIcon';
 import { Text } from '@twilio-paste/core/text';
 import { addConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
 import { ErrorManager, FlexPluginErrorType } from '../../utils/ErrorManager';
-import Analytics, { Event } from '../../utils/Analytics';
+import {Analytics, Event} from '../../utils/Analytics';
 
 export interface OwnProps {
   task?: ITask;

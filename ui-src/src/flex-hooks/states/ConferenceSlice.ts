@@ -46,4 +46,4 @@ export interface AppState {
 }
 
 // Combine the reducers
-export default combineReducers({ conference: conferenceSlice.reducer });
+export default conferenceSlice.reducer;

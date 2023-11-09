@@ -1,6 +1,4 @@
-const { isString, isObject, isNumber, isBoolean } = require('lodash');
-
-const { retryHandler } = require(Runtime.getFunctions()['twilio-wrappers/retry-handler'].path);
+import { ConferenceUtils } from '@twilio/flex-plugins-library-utils';
 
 /**
  * @param {object} parameters the parameters for the function
@@ -14,25 +12,20 @@ const { retryHandler } = require(Runtime.getFunctions()['twilio-wrappers/retry-h
  */
 exports.addParticipant = async (parameters) => {
   const { context, taskSid, to, from } = parameters;
+  const config = {
+    attempts: 3,
+    taskSid,
+    to,
+    from,
+  };
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain taskSid string';
-  if (!isString(to)) throw 'Invalid parameters object passed. Parameters must contain to string';
-  if (!isString(from)) throw 'Invalid parameters object passed. Parameters must contain from string';
-
+  const client = context.getTwilioClient();
+  const conferenceClient = new ConferenceUtils(client, config);
   try {
-    const client = context.getTwilioClient();
-
-    const participantsResponse = await client.conferences(taskSid).participants.create({
-      to,
-      from,
-      earlyMedia: true,
-      endConferenceOnExit: false,
-    });
-
-    return { success: true, callSid: participantsResponse.callSid, status: 200 };
+    const participants = await conferenceClient.addParticipant(config);
+    return { success: true, callSid: participants.participantsResponse.callSid, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return { success: false, status: error.status, message: error.message };
   }
 };
 
@@ -49,21 +42,20 @@ exports.addParticipant = async (parameters) => {
 exports.holdParticipant = async (parameters) => {
   const { context, conference, participant, hold } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conference)) throw 'Invalid parameters object passed. Parameters must contain conference string';
-  if (!isString(participant)) throw 'Invalid parameters object passed. Parameters must contain participant string';
-  if (!isBoolean(hold)) throw 'Invalid parameters object passed. Parameters must contain hold boolean';
+  const config = {
+    attempts: 3,
+    conference,
+    participant,
+    hold,
+  };
 
+  const client = context.getTwilioClient();
+  const conferenceClient = new ConferenceUtils(client, config);
   try {
-    const client = context.getTwilioClient();
-
-    const participantsResponse = await client.conferences(conference).participants(participant).update({
-      hold,
-    });
-
-    return { success: true, callSid: participantsResponse.callSid, status: 200 };
+    const participants = await conferenceClient.holdParticipant(config);
+    return { success: true, callSid: participants.participantsResponse.callSid, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return { success: false, status: error.status, message: error.message };
   }
 };
 
@@ -79,18 +71,19 @@ exports.holdParticipant = async (parameters) => {
 exports.removeParticipant = async (parameters) => {
   const { context, conference, participant } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conference)) throw 'Invalid parameters object passed. Parameters must contain conference string';
-  if (!isString(participant)) throw 'Invalid parameters object passed. Parameters must contain participant string';
+  const config = {
+    attempts: 3,
+    conference,
+    participant,
+  };
 
+  const client = context.getTwilioClient();
+  const conferenceClient = new ConferenceUtils(client, config);
   try {
-    const client = context.getTwilioClient();
-
-    const participantsResponse = await client.conferences(conference).participants(participant).remove();
-
+    const participants = await conferenceClient.removeParticipant(config);
     return { success: true, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return { success: false, status: error.status, message: error.message };
   }
 };
 
@@ -107,21 +100,19 @@ exports.removeParticipant = async (parameters) => {
 exports.updateParticipant = async (parameters) => {
   const { context, conference, participant, endConferenceOnExit } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conference)) throw 'Invalid parameters object passed. Parameters must contain conference string';
-  if (!isString(participant)) throw 'Invalid parameters object passed. Parameters must contain participant string';
-  if (!isBoolean(endConferenceOnExit))
-    throw 'Invalid parameters object passed. Parameters must contain endConferenceOnExit boolean';
+  const config = {
+    attempts: 3,
+    conference,
+    participant,
+    endConferenceOnExit,
+  };
 
+  const client = context.getTwilioClient();
+  const conferenceClient = new ConferenceUtils(client, config);
   try {
-    const client = context.getTwilioClient();
-
-    const participantsResponse = await client.conferences(conference).participants(participant).update({
-      endConferenceOnExit,
-    });
-
-    return { success: true, callSid: participantsResponse.callSid, status: 200 };
+    const participants = await conferenceClient.updateParticipant(config);
+    return { success: true, callSid: participants.participantsResponse.callSid, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return { success: false, status: error.status, message: error.message };
   }
 };

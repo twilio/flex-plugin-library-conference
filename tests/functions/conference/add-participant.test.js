@@ -4,53 +4,42 @@ jest.mock('../../../functions/helpers/prepare-function.private.js', () => ({
   __esModule: true,
   prepareFlexFunction: (_, fn) => fn,
 }));
+jest.mock('@twilio/flex-plugins-library-utils', () => ({
+  __esModule: true,
+  ConferenceUtils: jest.fn(),
+}));
+
+import { ConferenceUtils } from '@twilio/flex-plugins-library-utils';
 
 const mockCallSid = 'CSxxxxx';
 describe('Add Participant', () => {
-  const getAddParticipantMockTwilioClient = function (createParticipant) {
-    const createConferenceService = (taskSid) => ({
-      sid: taskSid,
-    });
-
-    const mockConferenceService = {
-      conferences: {
-        create: createConferenceService,
-      },
-      participants: {
-        create: createParticipant,
-      },
-    };
-    return {
-      conferences: (_taskSid) => mockConferenceService,
-    };
-  };
-
-  const createParticipant = jest.fn(() =>
-    Promise.resolve({
-      callSid: mockCallSid,
-    }),
-  );
-
   beforeAll(() => {
     helpers.setup();
     global.Runtime._addFunction('helpers/prepare-function', './functions/helpers/prepare-function.private.js');
-    global.Runtime._addFunction('helpers/parameter-validator', './functions/helpers/parameter-validator.private.js');
     global.Runtime._addFunction(
       'twilio-wrappers/conference-participant',
       './functions/twilio-wrappers/conference-participant.private.js',
     );
-    global.Runtime._addFunction(
-      'twilio-wrappers/retry-handler',
-      './functions/twilio-wrappers/retry-handler.private.js',
-    );
   });
 
   it('addParticipant is called successfully ', async () => {
+    ConferenceUtils.mockImplementation((value) => {
+      return {
+        addParticipant: jest.fn(() =>
+          Promise.resolve({
+            status: 200,
+            participantsResponse: {
+              callSid: mockCallSid,
+            },
+            success: true,
+          }),
+        ),
+      };
+    });
     const AddParticipant = require('../../../functions/conference/add-participant');
     const handlerFn = AddParticipant.handler;
     const mockContext = {
-      PATH: 'mockPath',
-      getTwilioClient: () => getAddParticipantMockTwilioClient(createParticipant),
+      getTwilioClient: () => () => jest.fn(),
     };
     const mockEvent = {
       taskSid: 'TSxxxxx',

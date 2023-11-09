@@ -179,7 +179,6 @@ class ConferenceService extends ApiService {
         body: this.buildBody(encodedParams),
       })
         .then((resp: GetCallResponse) => {
-          console.log('The call properties are', resp.callProperties);
           resolve(resp.callProperties);
         })
         .catch((e) => {
