@@ -44,8 +44,8 @@ exports.holdParticipant = async (parameters) => {
 
   const config = {
     attempts: 3,
-    conference,
-    participant,
+    conferenceSid: conference,
+    participantSid: participant,
     hold,
   };
 
@@ -73,8 +73,8 @@ exports.removeParticipant = async (parameters) => {
 
   const config = {
     attempts: 3,
-    conference,
-    participant,
+    conferenceSid: conference,
+    participantSid: participant,
   };
 
   const client = context.getTwilioClient();
@@ -102,8 +102,8 @@ exports.updateParticipant = async (parameters) => {
 
   const config = {
     attempts: 3,
-    conference,
-    participant,
+    conferenceSid: conference,
+    participantSid: participant,
     endConferenceOnExit,
   };
 
