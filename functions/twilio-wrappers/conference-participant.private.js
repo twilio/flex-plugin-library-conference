@@ -1,4 +1,4 @@
-import { ConferenceUtils } from '@twilio/flex-plugins-library-utils';
+const { ConferenceUtils } = require('@twilio/flex-plugins-library-utils');
 
 /**
  * @param {object} parameters the parameters for the function
