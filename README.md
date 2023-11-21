@@ -128,26 +128,3 @@ and then
 `twilio serverless:deploy`
 
 (optionally you can run locally with `twilio serverless:start --ngrok=""`)
-
-### Laundry List of activities to be done for each plugin
-
-1. Create individual repo for each plugin
-2. Test the plugin against Felx UI 2.x for compatibility
-3. Create plugin specific CI/CD files for (actions file for bundle creation, release creation and running unit tests)
-4. UI logs to be replaced with standard ConsoleLogger provided as util in the repo
-5. Unit test for UI code and serverless code
-6. Snyk integration for security vulenrabilities (fix them if there are any)
-7. CodeCov integration for testing coverage (min threshold is 80%)
-8. Telemetry (varies from plugin to plugin) - Make use of the manager.reportPluginInteraction() to send the event data to Kibana
-9. For logging, console.log/warn/error should be effecrively used with enough contextual information (these will by default show up in debugger once enabled)
-10. Exception handling with degraded UX or information to UI along with serverless retry mechanism (for wherever applicable)
-
-- 5xx should be handled with retry mechanism (max of 3 attempts)
-- 4xx should be reported back to user saying "Please try after some time...."
-
-11. E2E test suite for the entire plugin
-12. For E2E or any automated test, container components and user interactable child components must have ID attribute set.
-13. Details.md file to have content that needs to show up on PluginsLibrary frontend
-14. Should have License file in the repo
-15. Updating the readme.md
-16. Plugin template should have a screeshot folder, which contains one image (jpg, png, gif) of AA X BB resolution.
