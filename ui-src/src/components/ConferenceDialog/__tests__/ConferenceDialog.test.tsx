@@ -96,7 +96,7 @@ describe('Conference Dialog', () => {
     const phoneNumber = getByTestId('phoneNumberInput');
     if (phoneNumber) {
       fireEvent.change(phoneNumber, {
-        target: { value: '+1xxxxxx' },
+        target: { value: '+1234566' },
       });
     }
     const dialButton = getByTitle('Dial').closest('button');
@@ -118,7 +118,7 @@ describe('Conference Dialog', () => {
     const phoneNumber = getByTestId('phoneNumberInput');
     if (phoneNumber) {
       fireEvent.change(phoneNumber, {
-        target: { value: '+1xxxxxx' },
+        target: { value: '+1234566' },
       });
       fireEvent.keyPress(phoneNumber, { key: 'Enter', code: 13, charCode: 13 });
     }

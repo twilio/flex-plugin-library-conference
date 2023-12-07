@@ -8,7 +8,8 @@ import {
   ITask,
   useFlexSelector,
 } from '@twilio/flex-ui';
-import { AppState } from '../../flex-hooks/states/ConferenceSlice';
+import { AppState, removeInvalidConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
+import { useDispatch } from 'react-redux';
 
 const ActionsContainer = styled('div')`
   min-width: 88px;
@@ -42,6 +43,7 @@ const ParticipantActionsButtons = (props: OwnProps) => {
   const componentViewState = useFlexSelector(
     (state: AppState) => state.flex.view.componentViewStates.customParticipants,
   );
+  const dispatch = useDispatch();
 
   const [isKickConfirmationVisible, setIsKickConfirmationVisible] = useState(false);
 
@@ -114,13 +116,16 @@ const ParticipantActionsButtons = (props: OwnProps) => {
 
     if (!participant) return;
 
-    const { callSid, workerSid } = participant;
+    const { callSid, workerSid, phoneNumber } = participant;
     const { participantType } = participant;
+    const targetSid = participantType === 'worker' ? workerSid : callSid;
     Actions.invokeAction('KickParticipant', {
       participantType,
       task,
-      targetSid: participantType === 'worker' ? workerSid : callSid,
+      targetSid,
     });
+    // Remove invalid participant from connecting list
+    if (!targetSid) dispatch(removeInvalidConnectingParticipant(phoneNumber));
     hideKickConfirmation();
   };
 

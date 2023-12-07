@@ -24,10 +24,20 @@ const conferenceSlice = createSlice({
         state.connectingParticipants.splice(participantIndex, 1);
       }
     },
+    removeInvalidConnectingParticipant(state, action: PayloadAction<string | undefined>) {
+      const participantIndex = state.connectingParticipants.findIndex(
+        (p) => p.callSid == undefined && p.phoneNumber == action.payload,
+      );
+
+      if (participantIndex >= 0) {
+        state.connectingParticipants.splice(participantIndex, 1);
+      }
+    },
   },
 });
 
-export const { addConnectingParticipant, removeConnectingParticipant } = conferenceSlice.actions;
+export const { addConnectingParticipant, removeConnectingParticipant, removeInvalidConnectingParticipant } =
+  conferenceSlice.actions;
 
 // Register your redux store under a unique namespace
 export const reduxNamespace = 'conference';

@@ -9,13 +9,14 @@ import { Box } from '@twilio-paste/core/box';
 import { Button } from '@twilio-paste/core/button';
 import { Input } from '@twilio-paste/core/input';
 import { Label } from '@twilio-paste/core/label';
+import { HelpText } from '@twilio-paste/core/help-text';
 import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading } from '@twilio-paste/core/modal';
 import { PopoverContainer, Popover, PopoverButton } from '@twilio-paste/core/popover';
 import { InformationIcon } from '@twilio-paste/icons/cjs/InformationIcon';
 import { Text } from '@twilio-paste/core/text';
 import { addConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
 import { ErrorManager, FlexPluginErrorType } from '../../utils/ErrorManager';
-import {Analytics, Event} from '../../utils/Analytics';
+import { Analytics, Event } from '../../utils/Analytics';
 
 export interface OwnProps {
   task?: ITask;
@@ -23,6 +24,7 @@ export interface OwnProps {
 
 const ConferenceDialog = (props: OwnProps) => {
   const [conferenceTo, setConferenceTo] = React.useState('');
+  const [isDialDisabled, setDialDisabled] = React.useState(false);
 
   const componentViewStates = useFlexSelector((state: AppState) => state.flex.view.componentViewStates);
   const phoneNumber = useFlexSelector((state: AppState) => state.flex.worker.attributes.phone);
@@ -51,19 +53,41 @@ const ConferenceDialog = (props: OwnProps) => {
     });
   };
 
+  const isValidNumber = (input: string) => {
+    const numberRegex = new RegExp(/[^0-9]/, 'g');
+    if (input.length > 0) {
+      if (input.charAt(0) === '+') {
+        if (input.substring(1).match(numberRegex)) {
+          setDialDisabled(true);
+          return false;
+        } else {
+          setDialDisabled(false);
+          return true;
+        }
+      } else {
+        setDialDisabled(true);
+        return false;
+      }
+    }
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const key = e.key;
 
     if (key === 'Enter') {
-      addConferenceParticipant();
-      closeDialog();
-      e.preventDefault();
+      if (isValidNumber(e.currentTarget.value)) {
+        addConferenceParticipant();
+        closeDialog();
+        e.preventDefault();
+      }
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setConferenceTo(value);
+    if (isValidNumber(e.target.value)) {
+      const value = e.target.value;
+      setConferenceTo(value);
+    }
   };
 
   const handleDialButton = (e: React.MouseEvent<HTMLElement>) => {
@@ -160,6 +184,11 @@ const ConferenceDialog = (props: OwnProps) => {
             onKeyPress={handleKeyPress}
             type="text"
           />
+          {Boolean(isDialDisabled) && (
+            <HelpText id={`help-text`} variant="error">
+              {'Please enter a valid number starting with "+"'}
+            </HelpText>
+          )}
         </Box>
       </ModalBody>
       <ModalFooter>
@@ -167,7 +196,7 @@ const ConferenceDialog = (props: OwnProps) => {
           <Button variant="secondary" onClick={handleButtonClose} title="Cancel">
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleDialButton} title="Dial">
+          <Button variant="primary" disabled={isDialDisabled} onClick={handleDialButton} title="Dial">
             Dial
           </Button>
         </ModalFooterActions>
