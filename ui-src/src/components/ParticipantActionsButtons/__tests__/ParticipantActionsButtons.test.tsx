@@ -5,6 +5,11 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import * as Flex from '@twilio/flex-ui';
 
+const mockDispatch = jest.fn();
+jest.mock('react-redux', () => ({
+  useDispatch: () => mockDispatch,
+}));
+
 describe('ParticipantActionsButtons', () => {
   beforeEach(() => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
